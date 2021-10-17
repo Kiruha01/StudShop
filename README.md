@@ -30,6 +30,7 @@ StudShop
 | com_method | String(100) | not null |
 |tokens| Text | |
 | is_stuff| Boolean | not null |
+| num_deals | Integer | not null, default=0 |
 
 `com_method` - Ссылка на предпочитаемый способ связи (Телеграм, ВК и т.д.)
 
@@ -54,7 +55,7 @@ StudShop
 | ---- | ---- | ---------- |
 |product_id | Integer | primary_key|
 |name|String(20)| not null |
-|price | Integer | not null |
+|price | Money | not null |
 |description | Text | |
 |category_id | Integer | ForeignKey(Category), nullable |
 |location_id|Integer| ForeignKey(Location), not null|
