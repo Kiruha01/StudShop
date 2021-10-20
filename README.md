@@ -30,7 +30,6 @@ StudShop
 | com_method | String(100) | not null |
 |tokens| Text | |
 | is_stuff| Boolean | not null |
-| num_deals | Integer | not null, default=0 |
 
 `com_method` - Ссылка на предпочитаемый способ связи (Телеграм, ВК и т.д.)
 
@@ -60,6 +59,8 @@ StudShop
 |category_id | Integer | ForeignKey(Category), nullable |
 |location_id|Integer| ForeignKey(Location), not null|
 |owner_id | Integer |ForeignKey(User), not null |
+| active | Boolean | nul null |
+| approved | Boolean | nul null |
 
 
 ### Picture
@@ -75,7 +76,16 @@ StudShop
 | booking_id| Integer | primary_key |
 | user_id | Integer | ForeignKey(User) |
 | product_id | Integer | ForeignKey(Product), ON DELETE CASCADE |
-| time | timestamp | not null |
+| date | timestamp | not null |
+
+### Deal
+| name | type | constrains |
+| ---- | ---- | ---------- |
+| deal_id| Integer | primary_key |
+| user_id | Integer | ForeignKey(User) |
+| product_id | Integer | ForeignKey(Product), ON DELETE CASCADE |
+| date | timestamp | not null |
+
 
 UNIQUE(user_id, product_id)
 
