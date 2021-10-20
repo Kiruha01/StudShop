@@ -78,6 +78,8 @@ StudShop
 | product_id | Integer | ForeignKey(Product), ON DELETE CASCADE |
 | date | timestamp | not null |
 
+UNIQUE(user_id, product_id)
+
 ### Deal
 | name | type | constrains |
 | ---- | ---- | ---------- |
@@ -86,8 +88,7 @@ StudShop
 | product_id | Integer | ForeignKey(Product), ON DELETE CASCADE |
 | date | timestamp | not null |
 
-
-UNIQUE(user_id, product_id)
+Информация о совершённых сделках.  
 
 ## Общие ограничения целостности
 * Между таблицами `Product` и `Category`, `Product` и `User`, `Product` и `Location` отношение `Many to one`. Между `Product` и `Picture` - `One to many`
