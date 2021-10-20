@@ -59,8 +59,8 @@ StudShop
 |category_id | Integer | ForeignKey(Category), nullable |
 |location_id|Integer| ForeignKey(Location), not null|
 |owner_id | Integer |ForeignKey(User), not null |
-| active | Boolean | nul null |
-| approved | Boolean | nul null |
+| active | Boolean | not null |
+| approved | Boolean | not null |
 
 
 ### Picture
