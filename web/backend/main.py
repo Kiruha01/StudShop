@@ -4,8 +4,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 from .user import users
-
-db = SQLAlchemy()
+from .database import db
 
 
 def create_app():

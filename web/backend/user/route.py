@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, url_for, request
-
 from flask_restful import Resource, Api
+
+from .model import User
 
 users = Blueprint('auth_users', __name__)
 api = Api(users)

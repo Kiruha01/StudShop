@@ -1,1 +1,1 @@
-from web.backend.main import create_app
+from backend.main import create_app, db
