@@ -17,6 +17,7 @@ import config
 from .user import users
 from .user.model import User
 from .product.model import *
+from .deals.model import *
 from .database import db
 
 
@@ -45,6 +46,8 @@ def create_app():
         Location.query.all()
         Picture.query.all()
         Category.query.all()
+        Booking.query.all()
+        Deal.query.all()
         if current_user.is_authenticated:
             return (
                 "<p>Hello, {}! You're logged in! Email: {}</p>"
