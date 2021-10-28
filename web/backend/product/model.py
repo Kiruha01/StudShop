@@ -18,13 +18,13 @@ class Product(db.Model):
     __tablename__ = 'product'
     product_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
-    price = db.Column(db.Numeric(7, 2), nullable=False),
+    price = db.Column(db.Numeric(7, 2), nullable=False)
     description = db.Column(db.Text)
     category_id = db.Column(db.ForeignKey(Category.category_id), nullable=True)
     location_id = db.Column(db.ForeignKey(Location.location_id), nullable=False)
     owner_id = db.Column(db.ForeignKey(User.user_id), nullable=False)
-    is_active = db.Column(db.Boolean, default=True, nullable=False)
-    is_approved = db.Column(db.Boolean, default=False, nullable=False)
+    is_active = db.Column(db.Boolean, server_default='t', nullable=False)
+    is_approved = db.Column(db.Boolean, server_default='f', nullable=False)
 
 
 class Picture(db.Model):

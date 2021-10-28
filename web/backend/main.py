@@ -16,6 +16,7 @@ from flask_login import (
 import config
 from .user import users
 from .user.model import User
+from .product.model import *
 from .database import db
 
 
@@ -40,6 +41,10 @@ def create_app():
 
     @app.route("/")
     def index():
+        Product.query.all()
+        Location.query.all()
+        Picture.query.all()
+        Category.query.all()
         if current_user.is_authenticated:
             return (
                 "<p>Hello, {}! You're logged in! Email: {}</p>"
@@ -115,8 +120,8 @@ def create_app():
         logout_user()
         return redirect('/')
 
+    app.register_blueprint(users, url_prefix='/api/user/')
     with app.app_context():
-        app.register_blueprint(users, url_prefix='/api/user/')
         db.create_all()  # Create sql tables for our data models
 
         return app
