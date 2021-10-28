@@ -29,7 +29,7 @@ StudShop
 | name | String(100)| nullable |
 | com_method | String(100) | not null |
 |tokens| Text | |
-| is_staff| Boolean | not null |
+| is_staff| Boolean | not null, default=`false` |
 
 `com_method` - Ссылка на предпочитаемый способ связи (Телеграм, ВК и т.д.)
 
@@ -59,8 +59,8 @@ StudShop
 |category_id | Integer | ForeignKey(Category), nullable |
 |location_id|Integer| ForeignKey(Location), not null|
 |owner_id | Integer |ForeignKey(User), not null |
-| active | Boolean | not null |
-| approved | Boolean | not null |
+| is_active | Boolean | not null, default=`true` |
+| is_approved | Boolean | not null,default=`false` |
 
 
 ### Picture
