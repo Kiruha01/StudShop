@@ -15,7 +15,7 @@ from flask_login import (
 
 import config
 from .user import users
-from .product import products
+from .product.route import products
 from .user.model import User
 from .product.model import *
 from .deals.model import *

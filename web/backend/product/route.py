@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from flask_restful import Resource, Api, marshal_with, reqparse, inputs
+from flask_restful import Resource, Api, marshal_with, reqparse, inputs, marshal
 from sqlalchemy import func, sql
 from sqlalchemy.orm import aliased
 
@@ -8,7 +8,8 @@ from flask_login import current_user
 from .model import *
 from backend.deals.model import Booking
 from backend.database import db
-from backend.utils import staff_required
+from backend.utils import staff_required, remove_none_filters
+from backend.utils import login_required
 
 products = Blueprint('products', __name__)
 api = Api(products)
@@ -26,6 +27,16 @@ def get_products_with_is_booking(product_id=None):
 
 
 class ProductListView(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('name', type=str, required=True)
+    parser.add_argument('price', type=float, required=True)
+    parser.add_argument('category_id', type=int)
+    parser.add_argument('location_id', type=int, required=True)
+    parser.add_argument('description', type=str)
+    # parser.add_argument('images')
+
+
+    # TODO: переписать
     @marshal_with(product_fields_small)
     def get(self):
         q = get_products_with_is_booking()
@@ -36,8 +47,24 @@ class ProductListView(Resource):
             out.append(prod)
         return out
 
+    @login_required
+    def post(self):
+        # TODO: Add pictures
+        args = self.parser.parse_args()
+        product = Product(**args, owner_id=current_user.user_id)
+        db.session.add(product)
+        db.session.commit()
+        return '', 204
+
 
 class ProductView(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('name', type=str)
+    parser.add_argument('price', type=float)
+    parser.add_argument('category_id', type=int)
+    parser.add_argument('location_id', type=int)
+    parser.add_argument('description', type=str)
+
     @marshal_with(product_fields)
     def get(self, product_id):
         prod, queue, book = get_products_with_is_booking(product_id)
@@ -49,6 +76,57 @@ class ProductView(Resource):
         prod.you_booked = cnt[0] > 0
         return prod
 
+    @login_required
+    def patch(self, product_id):
+        prod = Product.query.get_or_404(product_id)
+        if prod.owner_id != current_user.user_id:
+            return {"message": "Only for owner"}, 403
+        args = remove_none_filters(self.parser.parse_args())
+        db.session.query(Product).filter_by(product_id=product_id).update(args)
+        db.session.commit()
+        return '', 204
+
+    @login_required
+    def delete(self, product_id):
+        prod = Product.query.get_or_404(product_id)
+        if prod.owner_id != current_user.user_id:
+            return {"message": "Only for owner"}, 403
+        db.session.delete(prod)
+        db.session.commit()
+        return '', 204
+
+
+class PictureView(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('url', type=str, required=True)
+
+    @login_required
+    def post(self, product_id):
+        prod = Product.query.get_or_404(product_id)
+        if prod.owner_id != current_user.user_id:
+            return {"message": "Only for owner"}, 403
+        args = self.parser.parse_args()
+        pic = Picture(**args, product_id=product_id)
+        db.session.add(pic)
+        db.session.commit()
+        return '', 204
+
+
+class PictureItemView(Resource):
+    @login_required
+    def delete(self, product_id, picture_id):
+        prod = Product.query.get_or_404(product_id)
+        if prod.owner_id != current_user.user_id:
+            return {"message": "Only for owner"}, 403
+        pic = Picture.query.get_or_404(picture_id)
+        db.session.delete(pic)
+        db.session.commit()
+        return '', 204
+
 
 api.add_resource(ProductListView, '/')
 api.add_resource(ProductView, '/<int:product_id>/')
+api.add_resource(PictureView, '/<int:product_id>/pictures/')
+api.add_resource(PictureItemView, '/<int:product_id>/pictures/<int:picture_id>/')
+
+
