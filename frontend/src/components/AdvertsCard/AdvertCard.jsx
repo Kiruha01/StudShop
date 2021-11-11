@@ -19,6 +19,7 @@ const AdvertCard = ({product}) => {
                     <div>
                         <p className="mb-0">{product.price} руб.</p>
                         <RoundLabel color_class="bg-primary">{product.location.name}</RoundLabel>
+
                         {product.category ?
                             <RoundLabel color_class="bg-warning">{product.category.name}</RoundLabel>
                             : ''
