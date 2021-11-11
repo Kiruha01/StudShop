@@ -63,6 +63,7 @@ product_fields_small = {
     'name': fields.String,
     'price': fields.Float,
     'location': fields.Nested(location_fields),
+    "category": fields.Nested(category_fields, allow_null=True),
     'owner': fields.Nested(user_fields),
     'pictures': fields.Nested(picture_field, allow_null=True),
     'is_booking': fields.Boolean,
@@ -74,5 +75,4 @@ product_fields.update({
     'description': fields.String,
     "queue_len": fields.Integer,
     "you_booked": fields.Boolean,
-    "category": fields.Nested(category_fields, allow_null=True)
 })
