@@ -35,6 +35,13 @@ def create_app():
     login_manager = LoginManager()
     login_manager.init_app(app)
 
+    @app.after_request
+    def apply_caching(response):
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, DELETE'
+        return response
+
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(user_id)
