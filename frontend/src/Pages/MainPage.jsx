@@ -7,12 +7,14 @@ import FilterByBooking from "../components/FilterPanel/FilterByBooking";
 
 const MainPage = () => {
     const [products, setProducts] = useState([])
+    const [productFilter, setProductFilter] = useState({})
+
     useEffect(() => {
         getProducts()
-    }, [])
+    }, [productFilter])
 
     async function getProducts(){
-        const products = await AdvertServices.getAll()
+        const products = await AdvertServices.getAll(productFilter)
         setProducts(products)
     }
 
@@ -29,7 +31,7 @@ const MainPage = () => {
             <div className="row pt-2">
                 <div className="col-3 p-3">
                     <FilterPanel id="filter">
-                        <FilterByBooking idAccordion="filter"/>
+                        <FilterByBooking idAccordion="filter" filter={productFilter} setFilter={setProductFilter}/>
                     </FilterPanel>
                 </div>
                 <div className="col p-3">

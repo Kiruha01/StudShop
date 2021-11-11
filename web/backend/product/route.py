@@ -21,9 +21,9 @@ def get_products_with_is_booking(product_id=None):
         outerjoin(Booking, Product.product_id == Booking.product_id). \
         group_by(Product.product_id)
     if product_id is None:
-        return query.all()
+        return query
     else:
-        return query.filter(Product.product_id == product_id).first_or_404()
+        return query.filter(Product.product_id == product_id)
 
 
 class ProductListView(Resource):
@@ -35,16 +35,22 @@ class ProductListView(Resource):
     parser.add_argument('description', type=str)
     # parser.add_argument('images')
 
+    parser2 = reqparse.RequestParser()
+    parser2.add_argument('is_booking')
+
+
 
     # TODO: переписать
     @marshal_with(product_fields_small)
     def get(self):
         q = get_products_with_is_booking()
+        args = remove_none_filters(self.parser2.parse_args())
 
         out = []
         for prod, queue, book in q:
             prod.is_booking = queue > 0
-            out.append(prod)
+            if args.get('is_booking') is None or (args.get('is_booking') == 'true') == prod.is_booking:
+                out.append(prod)
         return out
 
     @login_required
@@ -67,7 +73,7 @@ class ProductView(Resource):
 
     @marshal_with(product_fields)
     def get(self, product_id):
-        prod, queue, book = get_products_with_is_booking(product_id)
+        prod, queue, book = get_products_with_is_booking(product_id).first_or_404()
 
         prod.queue_len = queue
         prod.is_booking = queue > 0
