@@ -28,7 +28,6 @@ StudShop
 | email| String(100)| unique, not null|
 | name | String(100)| nullable |
 | com_method | String(100) | not null |
-|tokens| Text | |
 | is_staff| Boolean | not null, default=`false` |
 
 `com_method` - Ссылка на предпочитаемый способ связи (Телеграм, ВК и т.д.)
@@ -54,7 +53,7 @@ StudShop
 | ---- | ---- | ---------- |
 |product_id | Integer | primary_key|
 |name|String(20)| not null |
-|price | Money | not null |
+|price | Numeric(7, 2) | not null |
 |description | Text | |
 |category_id | Integer | ForeignKey(Category), nullable |
 |location_id|Integer| ForeignKey(Location), not null|
