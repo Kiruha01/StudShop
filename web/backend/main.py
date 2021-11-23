@@ -17,6 +17,7 @@ from .product.route import products
 from .user.model import User
 from .category.route import categories
 from .location.route import locations
+from .deals.route import bookings
 from .database import db
 
 
@@ -131,6 +132,7 @@ def create_app():
     app.register_blueprint(products, url_prefix='/api/products/')
     app.register_blueprint(categories, url_prefix='/api/categories/')
     app.register_blueprint(locations, url_prefix='/api/locations/')
+
 
 
     with app.app_context():

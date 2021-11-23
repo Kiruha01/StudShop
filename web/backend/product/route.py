@@ -11,6 +11,8 @@ from backend.database import db
 from backend.utils import staff_required, remove_none_filters
 from backend.utils import login_required
 
+from backend.deals.route import BookingListView
+
 products = Blueprint('products', __name__)
 api = Api(products)
 
@@ -83,7 +85,7 @@ class ProductView(Resource):
         return prod
 
     @login_required
-    def patch(self, product_id):
+    def put(self, product_id):
         prod = Product.query.get_or_404(product_id)
         if prod.owner_id != current_user.user_id:
             return {"message": "Only for owner"}, 403
@@ -134,5 +136,6 @@ api.add_resource(ProductListView, '/')
 api.add_resource(ProductView, '/<int:product_id>/')
 api.add_resource(PictureView, '/<int:product_id>/pictures/')
 api.add_resource(PictureItemView, '/<int:product_id>/pictures/<int:picture_id>/')
+api.add_resource(BookingListView, '/<int:product_id>/bookings/')
 
 
