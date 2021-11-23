@@ -1,14 +1,13 @@
-from flask import Blueprint, request
-from flask_restful import Resource, Api, marshal_with, reqparse, inputs, marshal
+from flask import Blueprint
+from flask_restful import Resource, Api, marshal_with, reqparse
 from sqlalchemy import func, sql
-from sqlalchemy.orm import aliased
 
 from flask_login import current_user
 
 from .model import *
 from backend.deals.model import Booking
 from backend.database import db
-from backend.utils import staff_required, remove_none_filters
+from backend.utils import remove_none_filters
 from backend.utils import login_required
 
 from backend.deals.route import BookingListView, ApproveBooking, BookingView

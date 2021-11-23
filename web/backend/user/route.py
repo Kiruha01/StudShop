@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, request
+from flask import Blueprint
 from flask_restful import Resource, Api, marshal_with, reqparse, inputs
 from flask_login import login_required, current_user
 
@@ -6,7 +6,7 @@ from .model import User, user_fields
 from backend.database import db
 from backend.utils import staff_required
 
-from backend.deals.model import Deal, deal_fields
+from backend.deals.model import deal_fields
 
 
 users = Blueprint('auth_users', __name__)

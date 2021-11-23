@@ -1,11 +1,9 @@
 from flask import Blueprint
-from flask_restful import Resource, Api, marshal_with, reqparse
+from flask_restful import Resource, Api, marshal_with
 from flask_login import login_required, current_user
-from sqlalchemy import desc
 
 from .model import Booking, booking_fields, Deal
 from backend.database import db
-from backend.utils import staff_required
 from backend.product.model import Product
 
 bookings = Blueprint('products', __name__)

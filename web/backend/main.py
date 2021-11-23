@@ -17,7 +17,6 @@ from .product.route import products
 from .user.model import User
 from .category.route import categories
 from .location.route import locations
-from .deals.route import bookings
 from .database import db
 
 
