@@ -29,9 +29,20 @@ class CategoriesListView(Resource):
 
 
 class CategoryView(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('name', type=str, required=True)
+
     @marshal_with(category_fields)
     def get(self, category_id):
         return Category.query.get_or_404(category_id)
+
+    @staff_required
+    def put(self, category_id):
+        args = self.parser.parse_args()
+        Category.query.get_or_404(category_id)
+        db.session.query(Category).filter_by(category_id=category_id).update(args)
+        db.session.commit()
+        return '', 204
 
     @staff_required
     def delete(self, category_id):
