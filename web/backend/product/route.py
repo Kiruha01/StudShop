@@ -11,7 +11,7 @@ from backend.database import db
 from backend.utils import staff_required, remove_none_filters
 from backend.utils import login_required
 
-from backend.deals.route import BookingListView, ApproveBooking
+from backend.deals.route import BookingListView, ApproveBooking, BookingView
 
 products = Blueprint('products', __name__)
 api = Api(products)
@@ -138,6 +138,4 @@ api.add_resource(PictureView, '/<int:product_id>/pictures/')
 api.add_resource(PictureItemView, '/<int:product_id>/pictures/<int:picture_id>/')
 api.add_resource(BookingListView, '/<int:product_id>/bookings/')
 api.add_resource(ApproveBooking, '/<int:product_id>/bookings/approve/')
-
-
-
+api.add_resource(BookingView, '/<int:product_id>/bookings/{int:booking_id}/')

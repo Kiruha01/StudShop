@@ -42,6 +42,22 @@ class BookingListView(Resource):
             return {'message': 'Not booked'}, 409
 
 
+class BookingView(Resource):
+    @login_required
+    @marshal_with(booking_fields)
+    def get(self, product_id, booking_id):
+        return Booking.query.get_or_404(booking_id)
+
+    @login_required
+    def delete(self, product_id, booking_id):
+        prod = Product.query.get_or_404(product_id)
+        if prod.owner_id != current_user.user_id:
+            return {"message": "Only for owner"}, 403
+        Booking.query.get_or_404(booking_id)
+        db.session.query(Booking).filter_by(booking_id=booking_id).delete()
+        return '', 204
+
+
 class ApproveBooking(Resource):
     @login_required
     @marshal_with(booking_fields)
