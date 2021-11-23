@@ -18,8 +18,8 @@ class LocationListView(Resource):
     def get(self):
         return Location.query.all()
 
-    @marshal_with(location_fields)
     @staff_required
+    @marshal_with(location_fields)
     def post(self):
         args = self.parser.parse_args()
         location = Location(name=args['name'])

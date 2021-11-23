@@ -1,6 +1,4 @@
 from flask_login import login_required, current_user
-from backend.database import db
-from backend.product.model import Product
 
 
 def staff_required(fun):
@@ -9,7 +7,7 @@ def staff_required(fun):
         if current_user.is_staff:
             return fun(*args, **kwargs)
         else:
-            return {'message': "Only for authorized users"}, 403
+            return {'message': "Only for staff users"}, 403
 
     return wrapper
 

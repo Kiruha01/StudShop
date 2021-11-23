@@ -18,8 +18,8 @@ class CategoriesListView(Resource):
     def get(self):
         return Category.query.all()
 
-    @marshal_with(category_fields)
     @staff_required
+    @marshal_with(category_fields)
     def post(self):
         args = self.parser.parse_args()
         category = Category(name=args['name'])
