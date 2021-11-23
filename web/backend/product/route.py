@@ -60,7 +60,7 @@ class ProductListView(Resource):
         product = Product(**args, owner_id=current_user.user_id)
         db.session.add(product)
         db.session.commit()
-        return '', 204
+        return product.product_id, 201
 
 
 class ProductView(Resource):

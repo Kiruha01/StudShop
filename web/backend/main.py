@@ -17,6 +17,7 @@ import config
 from .user import users
 from .product.route import products
 from .user.model import User
+from .category.route import categories
 from .product.model import *
 from .deals.model import *
 from .database import db
@@ -139,6 +140,8 @@ def create_app():
 
     app.register_blueprint(users, url_prefix='/api/user/')
     app.register_blueprint(products, url_prefix='/api/products/')
+    app.register_blueprint(categories, url_prefix='/api/categories/')
+
     with app.app_context():
         db.create_all()  # Create sql tables for our data models
 
