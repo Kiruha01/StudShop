@@ -49,7 +49,7 @@ def create_app():
 
     @app.route('/hook/')
     def hook():
-        user = User.query.get(1)
+        user = User.query.get(2)
         login_user(user)
         return '', 204
 
