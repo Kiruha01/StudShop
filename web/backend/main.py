@@ -1,9 +1,7 @@
 import json
-import os
 
 import requests as requests
 from flask import Flask, request, redirect
-from flask_sqlalchemy import SQLAlchemy
 from oauthlib.oauth2 import WebApplicationClient
 from flask_login import (
     LoginManager,
@@ -18,8 +16,7 @@ from .user import users
 from .product.route import products
 from .user.model import User
 from .category.route import categories
-from .product.model import *
-from .deals.model import *
+from .location.route import locations
 from .database import db
 
 
@@ -57,12 +54,6 @@ def create_app():
 
     @app.route("/")
     def index():
-        Product.query.all()
-        Location.query.all()
-        Picture.query.all()
-        Category.query.all()
-        Booking.query.all()
-        Deal.query.all()
         if current_user.is_authenticated:
             return (
                 "<p>Hello, {}! You're logged in! Email: {}</p>"
@@ -117,9 +108,7 @@ def create_app():
         uri, headers, body = client.add_token(userinfo_endpoint)
         userinfo_response = requests.get(uri, headers=headers, data=body)
 
-        unique_id = userinfo_response.json()["sub"]
         users_email = userinfo_response.json()["email"]
-        picture = userinfo_response.json()["picture"]
         users_name = userinfo_response.json()["name"]
 
         user = User.query.filter_by(email=users_email).first()
@@ -141,6 +130,8 @@ def create_app():
     app.register_blueprint(users, url_prefix='/api/user/')
     app.register_blueprint(products, url_prefix='/api/products/')
     app.register_blueprint(categories, url_prefix='/api/categories/')
+    app.register_blueprint(locations, url_prefix='/api/locations/')
+
 
     with app.app_context():
         db.create_all()  # Create sql tables for our data models
