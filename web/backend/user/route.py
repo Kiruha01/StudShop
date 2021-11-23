@@ -6,6 +6,9 @@ from .model import User, user_fields
 from backend.database import db
 from backend.utils import staff_required
 
+from backend.deals.model import Deal, deal_fields
+
+
 users = Blueprint('auth_users', __name__)
 api = Api(users)
 
@@ -48,6 +51,15 @@ class UserViewById(Resource):
         return '', 204
 
 
+class UserDealsViewById(Resource):
+    @marshal_with(deal_fields)
+    def get(self, user_id):
+        user = User.query.get_or_404(user_id)
+        return user.deals
+
+
 api.add_resource(UserView, '/')
 api.add_resource(UserViewById, '/<int:user_id>/')
+api.add_resource(UserDealsViewById, '/<int:user_id>/deals/')
+
 

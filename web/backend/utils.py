@@ -9,7 +9,7 @@ def staff_required(fun):
         if current_user.is_staff:
             return fun(*args, **kwargs)
         else:
-            return {'message': "Only for authorized users"}, 401
+            return {'message': "Only for authorized users"}, 403
 
     return wrapper
 
