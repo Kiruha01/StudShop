@@ -6,8 +6,13 @@ const QueueList = ({product_id}) => {
     const [qeue, setQueue] = useState([])
 
     useEffect(async () => {
-        setQueue(await BookingService.getAllBookings(product_id))
-    }, [])
+        try {
+            setQueue(await BookingService.getAllBookings(product_id))
+        }
+        catch (e){
+
+        }
+    }, [product_id])
 
     return (
         <div>

@@ -4,10 +4,11 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import MainPage from "./Pages/MainPage";
 import UserServises from "./API/UserServeces"
 import ProductPage from "./Pages/ProductPage";
+import axios from "axios";
 
 function App() {
     const [userInfo, setUserInfo] = useState({})
-    useEffect(() => {
+    useEffect(async () => {
         const curentUserInfo = UserServises.getInfoAboutMe()
             setUserInfo(curentUserInfo)
     }, [])

@@ -15,7 +15,7 @@ export default class UserServeces{
     }
 
     static getLoginUrl(redirectUrl){
-        return 'http://localhost:5000/login?redirect=' + redirectUrl
+        return 'http://localhost:5000/login'
     }
 
     static getLogoutUrl(){
