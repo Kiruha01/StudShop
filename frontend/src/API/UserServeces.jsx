@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default class AdvertServices{
+export default class UserServeces{
     static async getInfoAboutMe() {
         try {
             const response = await axios.get('http://localhost:5000/api/user/'

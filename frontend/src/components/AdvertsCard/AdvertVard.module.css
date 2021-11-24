@@ -9,6 +9,7 @@
     right: 10px;
     width: auto;
     color: black;
+    z-index: 99;
 }
 
 .photo_cover {

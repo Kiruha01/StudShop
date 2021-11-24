@@ -78,9 +78,12 @@ class ProductView(Resource):
 
         prod.queue_len = queue
         prod.is_booking = queue > 0
-        cnt = db.session.query(func.count()).filter(Booking.user_id == current_user.user_id,
-                                                    Booking.product_id == product_id).first()
-        prod.you_booked = cnt[0] > 0
+        try:
+            cnt = db.session.query(func.count()).filter(Booking.user_id == current_user.user_id,
+                                                        Booking.product_id == product_id).first()
+            prod.you_booked = cnt[0] > 0
+        except AttributeError:
+            prod.you_booked = False
         return prod
 
     @login_required
