@@ -119,7 +119,7 @@ def create_app():
             db.session.commit()
         login_user(user)
 
-        return redirect('/')
+        return redirect('http://localhost:3000')
 
     @login_required
     @app.route('/logout')
