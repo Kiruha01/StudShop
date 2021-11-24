@@ -6,16 +6,47 @@ import RoundLabel from "../components/AdvertsCard/RoundLabel";
 import OwnerName from "../components/AdvertsCard/OwnerName";
 import classes from "../components/AdvertsCard/AdvertVard.module.css";
 import QueueList from "../components/Queue/QueueList";
+import BookingService from "../API/BookingService";
 
 const ProductPage = () => {
     const params = useParams()
     const [productInfo, setInfo] = useState({name: null, pictures: [], location: {},
         category: {}, owner: {}, price: null})
+    const [youBooked, setYouBooked] = useState(false)
 
     useEffect(async () => {
         const response = await AdvertServices.getById(params.id)
         setInfo(response.data)
+        setYouBooked(response.data.you_booked)
     }, [])
+
+    const bookProduct = async () => {
+        try {
+            const res = await BookingService.Book(params.id)
+            setYouBooked(true)
+            setInfo({...productInfo, queue_len: productInfo.queue_len + 1, is_booking: true})
+            console.log(productInfo.is_booked)
+        }
+        catch (e){
+            if (e.response?.status === 409){
+                alert(e.response.data.toString())
+            }
+        }
+    }
+
+    const unbookProduct = async () => {
+        try {
+            const res = await BookingService.Unbook(params.id)
+            setYouBooked(false)
+            setInfo({...productInfo, queue_len: productInfo.queue_len - 1, is_booking: productInfo.queue_len - 1 > 0})
+
+        }
+        catch (e){
+            if (e.response?.status === 409){
+                alert(e.response.data.toString())
+            }
+        }
+    }
 
     return (
         <div className="container-fluid">
@@ -23,8 +54,12 @@ const ProductPage = () => {
                 <div className="col-4" style={{position: "relative"}}>
                     {productInfo.is_booking ? <RoundLabel color_class={"bg-dark " + classes.text}>Забронированно</RoundLabel> : ''}
                     <CaroselPhoto pictures={productInfo.pictures}/>
-                    <div className="d-flex">
-                        <a className="btn btn-success" href="#">Забронировать продукт</a>
+                    <div className="d-flex justify-content-between">
+                        {!youBooked ?
+                            <button className="btn btn-success" onClick={bookProduct}>Забронировать продукт</button>
+                            :
+                            <button className="btn btn-dark" onClick={unbookProduct}>NON Забронировать продукт</button>
+                        }
                         <div>Людей в очереди <span className="badge rounded-pill bg-success align-self-end">{productInfo.queue_len}</span> </div>
                     </div>
                     <div className="d-flex">

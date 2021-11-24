@@ -35,9 +35,10 @@ def create_app():
 
     @app.after_request
     def apply_caching(response):
-        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, DELETE'
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
         return response
 
     @login_manager.user_loader

@@ -9,13 +9,13 @@ import axios from "axios";
 function App() {
     const [userInfo, setUserInfo] = useState({})
     useEffect(async () => {
-        const curentUserInfo = UserServises.getInfoAboutMe()
+        const curentUserInfo = await UserServises.getInfoAboutMe()
             setUserInfo(curentUserInfo)
     }, [])
 
   return (
       <div>
-          <Header user={userInfo}/>
+          <Header user={userInfo} setUser={setUserInfo}/>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<MainPage/>}/>

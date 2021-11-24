@@ -1,14 +1,14 @@
 import React from 'react';
+import BookingService from "../../API/BookingService";
 
-const QeueItem = ({bookingData}) => {
-    console.log(bookingData)
+const QeueItem = ({bookingData, delBooking}) => {
     return (
         <div className="card">
             <div className="card-body row">
                 <div className="col">{bookingData.user.name}</div>
                 <div className="col">{bookingData.user.com_method}</div>
                 <div className="col">{bookingData.date}</div>
-                <a href="#" className="col-1">
+                <a href="#" className="col-1" onClick={()=>{delBooking(bookingData.booking_id)}}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="firebrick"
                          className="bi bi-trash-fill" viewBox="0 0 16 16">
                         <path

@@ -5,6 +5,11 @@ import QeueItem from "./QeueItem";
 const QueueList = ({product_id}) => {
     const [qeue, setQueue] = useState([])
 
+    const  deleteBookById = async (id) => {
+        await BookingService.deleteBooking(product_id, id)
+        setQueue(qeue.filter((el) => el.booking_id !== id))
+    }
+
     useEffect(async () => {
         try {
             setQueue(await BookingService.getAllBookings(product_id))
@@ -16,7 +21,7 @@ const QueueList = ({product_id}) => {
 
     return (
         <div>
-            {qeue.map(item => <QeueItem bookingData={item}/>)}
+            {qeue.map(item => <QeueItem bookingData={item} delBooking={deleteBookById}/>)}
         </div>
     );
 };

@@ -6,6 +6,11 @@ from flask_restful import fields
 from sqlalchemy import func, UniqueConstraint
 
 
+class MyDateFormat(fields.Raw):
+    def format(self, value):
+        return value.strftime('%Y.%m.%d - %H:%m')
+
+
 class Booking(db.Model):
     __tablename__ = 'booking'
     booking_id = db.Column(db.Integer, primary_key=True)
@@ -22,7 +27,7 @@ booking_fields = {
     'booking_id': fields.Integer,
     'product': fields.Nested(product_fields_small),
     'user': fields.Nested(user_fields),
-    'date': fields.DateTime
+    'date': MyDateFormat
 }
 
 
@@ -42,5 +47,5 @@ deal_fields = {
     'deal_id': fields.Integer,
     'product': fields.Nested(product_fields_small),
     'user': fields.Nested(user_fields),
-    'date': fields.DateTime
+    'date': MyDateFormat
 }
