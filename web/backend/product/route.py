@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_restful import Resource, Api, marshal_with, reqparse
+from flask_restful import Resource, Api, marshal_with, reqparse, inputs
 from sqlalchemy import func, sql
 
 from flask_login import current_user
@@ -16,10 +16,14 @@ products = Blueprint('products', __name__)
 api = Api(products)
 
 
-def get_products_with_is_booking(product_id=None):
+def get_products_with_is_booking(product_id=None, is_active=None, user_id=None):
     is_booking_case = sql.expression.case((func.count(Booking.booking_id) > 0, "true"), else_="false")
-    query = db.session.query(Product, func.count(Booking.booking_id), is_booking_case). \
-        outerjoin(Booking, Product.product_id == Booking.product_id). \
+    query = db.session.query(Product, func.count(Booking.booking_id), is_booking_case)
+    if is_active is not None:
+        query = query.filter(Product.is_active == True)
+    if user_id is not None:
+        query = query.filter(Product.owner_id == user_id)
+    query = query.outerjoin(Booking, Product.product_id == Booking.product_id). \
         group_by(Product.product_id)
     if product_id is None:
         return query
@@ -38,6 +42,7 @@ class ProductListView(Resource):
 
     parser2 = reqparse.RequestParser()
     parser2.add_argument('is_booking')
+    parser2.add_argument('is_active')
     parser2.add_argument('my')
 
 
@@ -45,15 +50,15 @@ class ProductListView(Resource):
     # TODO: переписать
     @marshal_with(product_fields_small)
     def get(self):
-        q = get_products_with_is_booking()
         args = remove_none_filters(self.parser2.parse_args())
+        q = get_products_with_is_booking(is_active=args.get('is_active'),
+                                         user_id=current_user.user_id if args.get('my') else None)
 
         out = []
         for prod, queue, book in q:
             prod.is_booking = queue > 0
             if args.get('is_booking') is None or (args.get('is_booking') == 'true') == prod.is_booking:
-                if args.get('my') is None or (args.get('my') == 'true' and  prod.owner_id == current_user.user_id):
-                    out.append(prod)
+                out.append(prod)
         return out
 
     @login_required
@@ -73,6 +78,7 @@ class ProductView(Resource):
     parser.add_argument('category_id', type=int)
     parser.add_argument('location_id', type=int)
     parser.add_argument('description', type=str)
+    parser.add_argument('is_active', type=inputs.boolean)
 
     @marshal_with(product_fields)
     def get(self, product_id):

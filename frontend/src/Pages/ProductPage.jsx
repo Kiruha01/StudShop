@@ -8,7 +8,7 @@ import classes from "../components/AdvertsCard/AdvertVard.module.css";
 import QueueList from "../components/Queue/QueueList";
 import BookingService from "../API/BookingService";
 
-const ProductPage = () => {
+const ProductPage = ({user}) => {
     const params = useParams()
     const [productInfo, setInfo] = useState({name: null, pictures: [], location: {},
         category: {}, owner: {}, price: null})
@@ -47,26 +47,57 @@ const ProductPage = () => {
         }
     }
 
+    const openProduct = async () => {
+        const r = await AdvertServices.set_is_active(productInfo.product_id, true)
+        if (r.status !== 204){
+            alert(r.data)
+        }
+        else
+            setInfo({...productInfo, is_active: true})
+
+    }
+    const closeProduct = async () => {
+        const r = await AdvertServices.set_is_active(productInfo.product_id, false)
+        if (r.status !== 204){
+            alert(r.data)
+        }
+        else
+            setInfo({...productInfo, is_active: false})
+    }
+
     return (
         <div className="container-fluid">
             <div className="row mt-3">
                 <div className="col-4" style={{position: "relative"}}>
                     {productInfo.is_booking ? <RoundLabel color_class={"bg-dark " + classes.text}>Забронированно</RoundLabel> : ''}
                     <CaroselPhoto pictures={productInfo.pictures}/>
-                    <div className="d-flex justify-content-between">
-                        {!youBooked ?
-                            <button className="btn btn-success" onClick={bookProduct}>Забронировать продукт</button>
-                            :
-                            <button className="btn btn-dark" onClick={unbookProduct}>NON Забронировать продукт</button>
-                        }
-                        <div>Людей в очереди <span className="badge rounded-pill bg-success align-self-end">{productInfo.queue_len}</span> </div>
-                    </div>
-                    <div className="d-flex">
-                        <a className="btn btn-danger flex-fill" href="#">Закрыть объявление</a>
-                    </div>
-                    <div className="d-flex">
-                        <a className="btn btn-light flex-fill" href="#">Открыть повторно</a>
-                    </div>
+                    {user.user_id !== productInfo.owner.user_id ?
+                        <div className="d-flex justify-content-between">
+                            {!youBooked ?
+                                <button className="btn btn-success" onClick={bookProduct}>Забронировать продукт</button>
+                                :
+                                <button className="btn btn-dark" onClick={unbookProduct}>NON Забронировать
+                                    продукт</button>
+                            }
+                            <div>Людей в очереди <span
+                                className="badge rounded-pill bg-success align-self-end">{productInfo.queue_len}</span>
+                            </div>
+                        </div>
+                        : ''}
+                    {user.user_id === productInfo.owner.user_id && productInfo.is_active ?
+                        <div className="d-flex">
+                            <button className="btn btn-danger flex-fill"
+                            onClick={closeProduct}>Закрыть объявление</button>
+                        </div>
+                    : ''}
+                    {user.user_id === productInfo.owner.user_id && !productInfo.is_active ?
+                        <div className="d-flex">
+                            <button className="btn btn-light flex-fill"
+                            onClick={openProduct}>Открыть повторно</button>
+                        </div>
+                        : ''
+                    }
+
                 </div>
                 <div className="col-8 p-3">
                     <h1>{productInfo.name}</h1>
@@ -98,8 +129,11 @@ const ProductPage = () => {
                         </div>
                     </div>
                     <br/>
-
-                    <QueueList product_id={productInfo.product_id}/>
+                    {user.user_id === productInfo.owner.user_id ?
+                        <QueueList product_id={productInfo.product_id}/>
+                        :
+                        ""
+                    }
                 </div>
             </div>
         </div>

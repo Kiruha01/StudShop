@@ -21,7 +21,7 @@ function App() {
                     <Route path="/" element={<MainPage/>}/>
                 </Routes>
                 <Routes>
-                    <Route path="/product/:id" element={<ProductPage/>}/>
+                    <Route path="/product/:id" element={<ProductPage user={userInfo}/>}/>
                 </Routes>
                 <Routes>
                     <Route exact path="/profile" element={<ProfilePage user={userInfo} setUser={setUserInfo}/>}/>

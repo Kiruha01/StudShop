@@ -12,6 +12,15 @@
     z-index: 99;
 }
 
+.closed {
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    width: auto;
+    color: black;
+    z-index: 99;
+}
+
 .photo_cover {
     height: 250px;
     object-fit: cover;

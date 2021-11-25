@@ -21,7 +21,7 @@ const MainPage = () => {
     }, [])
 
     async function getProducts(){
-        const products = await AdvertServices.getAll(productFilter)
+        const products = await AdvertServices.getAll({...productFilter, is_active: true})
         setProducts(products)
     }
 
@@ -32,7 +32,7 @@ const MainPage = () => {
                     <button className="btn btn-light">+ Создать объявление</button>
                 </div>
                 <div className="col p-3">
-                    <SearchPanel/>
+                    {/*<SearchPanel/>*/}
                 </div>
             </div>
             <div className="row pt-2">

@@ -18,4 +18,16 @@ export default class AdvertServices{
             return e.response
         }
     }
+
+    static async set_is_active(id, is_active) {
+        try {
+            const response = await axios.put('http://localhost:5000/api/products/' + id + '/', {
+                is_active: is_active
+            })
+            return response
+        }
+        catch (e){
+            return e.response
+        }
+    }
 }
