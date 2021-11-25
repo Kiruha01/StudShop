@@ -3,14 +3,21 @@ import UserServeces from "../API/UserServeces";
 import List from "../components/DealsList/List";
 import AdvertsPanel from "../components/AdvertsPanel";
 import AdvertServices from "../API/AdvertServices";
+import {useParams} from 'react-router-dom'
 
-const ProfilePage = () => {
-    const [user, setUser] = useState({user_id: ''})
+const ProfilePage = ({user, setUser}) => {
     const [products, setProducts] = useState([])
-    useEffect(async ()=>{
-            const r = await UserServeces.getInfo()
-            setUser(r)
-    }, [])
+    const [curUser, setCurUser] = useState([])
+    const params = useParams()
+    useEffect(async ()=> {
+        if (params.id){
+            const res = await UserServeces.getInfoById(params.id)
+            setCurUser(res)
+        }
+        else{
+            setCurUser(user)
+        }
+    })
 
     useEffect(async () => {
         const res = await AdvertServices.getAll({my: true})
@@ -26,7 +33,7 @@ const ProfilePage = () => {
                         <span>Имя</span>
                     </div>
                     <div className="col">
-                        <span>{user.name}</span>
+                        <span>{curUser.name}</span>
                     </div>
                 </div>
                 <div className="row">
@@ -35,7 +42,7 @@ const ProfilePage = () => {
                         <span>Почта</span>
                     </div>
                     <div className="col">
-                        <span>{user.email}</span>
+                        <span>{curUser.email}</span>
                     </div>
                 </div>
                 <div className="row">
@@ -44,26 +51,39 @@ const ProfilePage = () => {
                         <span>Способ связи</span>
                     </div>
                     <div className="col">
-                        <input value={user.com_method} onChange={(event => setUser({...user, com_method: event.target.value}))}/>
+                        {params.id ?
+                            <span>{curUser.com_method}</span>
+                            :
+                            <input value={curUser.com_method}
+                                   onChange={(event => setCurUser({...curUser, com_method: event.target.value}))}/>
+                        }
                     </div>
-                    <div className="col">
-                        <button className="btn btn-primary"
-                            onClick={() => UserServeces.updateComMethod(user.user_id, user.com_method)}>Сохранить изменения</button>
-                    </div>
+                    {params.id ?
+                        ''
+                        :
+                        <div className="col">
+                            <button className="btn btn-primary"
+                                    onClick={() => UserServeces.updateComMethod('', curUser.com_method)}>Сохранить изменения</button>
+                        </div>}
                 </div>
             </div>
 
             <div className="row">
                 <h1>Совершённые сделки</h1>
-                <List user_id={user.user_id}/>
+                <List user_id={curUser.user_id}/>
             </div>
 
-            <div className="row">
-                <h1>Ваши объявления</h1>
-                <AdvertsPanel products={products}/>
-            </div>
+            {params.id ?
+                ''
+                :
+                <div className="row">
+                    <h1>Ваши объявления</h1>
+                    <AdvertsPanel products={products}/>
+                </div>
+            }
         </div>
     );
 };
+
 
 export default ProfilePage;

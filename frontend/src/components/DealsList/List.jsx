@@ -1,5 +1,4 @@
 import {React, useState, useEffect} from 'react';
-import BookingService from "../../API/BookingService";
 import UserServeces from "../../API/UserServeces";
 import DealItem from "./DealItem";
 

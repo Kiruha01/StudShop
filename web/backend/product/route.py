@@ -38,6 +38,7 @@ class ProductListView(Resource):
 
     parser2 = reqparse.RequestParser()
     parser2.add_argument('is_booking')
+    parser2.add_argument('my')
 
 
 
@@ -51,7 +52,8 @@ class ProductListView(Resource):
         for prod, queue, book in q:
             prod.is_booking = queue > 0
             if args.get('is_booking') is None or (args.get('is_booking') == 'true') == prod.is_booking:
-                out.append(prod)
+                if args.get('my') is None or (args.get('my') == 'true' and  prod.owner_id == current_user.user_id):
+                    out.append(prod)
         return out
 
     @login_required

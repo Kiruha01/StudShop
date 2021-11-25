@@ -27,7 +27,7 @@ const AdvertCard = ({product}) => {
                     </div>
                 </div>
             <div className="d-flex flex-row-reverse card-body mt-0">
-                <OwnerName name={product.owner.name}/>
+                <OwnerName name={product.owner.name} user_id={product.owner.user_id}/>
             </div>
         </div>
     );

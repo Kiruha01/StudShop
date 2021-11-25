@@ -24,7 +24,10 @@ function App() {
                     <Route path="/product/:id" element={<ProductPage/>}/>
                 </Routes>
                 <Routes>
-                    <Route path="/profile" element={<ProfilePage/>}/>
+                    <Route exact path="/profile" element={<ProfilePage user={userInfo} setUser={setUserInfo}/>}/>
+                </Routes>
+                <Routes>
+                    <Route exact path="/profile/:id" element={<ProfilePage user={userInfo} setUser={setUserInfo}/>}/>
                 </Routes>
             </BrowserRouter>
       </div>

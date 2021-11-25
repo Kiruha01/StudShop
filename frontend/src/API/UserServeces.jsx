@@ -41,7 +41,7 @@ export default class UserServeces{
 
     static async updateComMethod(user_id, method) {
         try {
-            const response = await axios.put('http://localhost:5000/api/user/' + user_id ? (user_id + '/') : '', {
+            const response = await axios.put('http://localhost:5000/api/user/' + (user_id ? (user_id + '/') : ''), {
                 com_method: method
                 }
             )

@@ -93,7 +93,7 @@ const ProductPage = () => {
                     <div>
                         <h3>Продавец</h3>
                         <div className="d-flex mx-3">
-                            <OwnerName  name={productInfo.owner.name}/>
+                            <OwnerName  name={productInfo.owner.name} user_id={productInfo.owner.user_id}/>
                             <p className="mx-2">{productInfo.owner.com_method}</p>
                         </div>
                     </div>
