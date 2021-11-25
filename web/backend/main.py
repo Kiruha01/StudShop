@@ -41,17 +41,22 @@ def create_app():
         response.headers['Access-Control-Allow-Credentials'] = 'true'
         return response
 
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(user_id)
+    @login_manager.request_loader
+    def load_user_from_request(request):
+        # auth_header = request.headers.get('Authorization')
+        # user_id = User.decode_auth_token(auth_header)
+        # if isinstance(user_id, str):
+        #     return None
+        user = User.query.get_or_404(1)
+        return user
 
     client = WebApplicationClient(app.config['GOOGLE_CLIENT_ID'])
 
-    @app.route('/hook/')
-    def hook():
-        user = User.query.get(2)
-        login_user(user)
-        return '', 204
+    # @app.route('/hook/')
+    # def hook():
+    #     user = User.query.get(2)
+    #     login_user(user)
+    #     return '', 204
 
     @app.route("/")
     def index():
@@ -118,9 +123,9 @@ def create_app():
             user = User(name=users_name, email=users_email, com_method=users_email)
             db.session.add(user)
             db.session.commit()
-        login_user(user)
+        token = user.encode_auth_token(user.user_id)
 
-        return redirect('http://localhost:3000')
+        return redirect('http://localhost:3000?token=' + token)
 
     @login_required
     @app.route('/logout')

@@ -4,7 +4,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import MainPage from "./Pages/MainPage";
 import UserServises from "./API/UserServeces"
 import ProductPage from "./Pages/ProductPage";
-import axios from "axios";
+import ProfilePage from "./Pages/ProfilePega";
 
 function App() {
     const [userInfo, setUserInfo] = useState({})
@@ -15,13 +15,16 @@ function App() {
 
   return (
       <div>
-          <Header user={userInfo} setUser={setUserInfo}/>
             <BrowserRouter>
+                <Header user={userInfo} setUser={setUserInfo}/>
                 <Routes>
                     <Route path="/" element={<MainPage/>}/>
                 </Routes>
                 <Routes>
                     <Route path="/product/:id" element={<ProductPage/>}/>
+                </Routes>
+                <Routes>
+                    <Route path="/profile" element={<ProfilePage/>}/>
                 </Routes>
             </BrowserRouter>
       </div>

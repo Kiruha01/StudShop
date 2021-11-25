@@ -11,7 +11,7 @@ export default class AdvertServices{
 
     static async getById(id) {
         try {
-            const response = await axios.get('http://localhost:5000/api/products/' + id + '/', {withCredentials: true})
+            const response = await axios.get('http://localhost:5000/api/products/' + id + '/')
             return response
         }
         catch (e){

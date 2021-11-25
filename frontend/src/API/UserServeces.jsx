@@ -3,7 +3,7 @@ import axios from "axios";
 export default class UserServeces{
     static async getInfoAboutMe() {
         try {
-            const response = await axios.get('http://localhost:5000/api/user/', {withCredentials: true}
+            const response = await axios.get('http://localhost:5000/api/user/',
             )
             console.log('!' + response.status)
             return response.data
@@ -21,11 +21,11 @@ export default class UserServeces{
     }
 
     static async login(){
-        await axios.get('http://localhost:5000/hook/', {withCredentials: true})
+        await axios.get('http://localhost:5000/hook/',)
     }
 
     static async logout(){
-        await axios.get('http://localhost:5000/logout/', {withCredentials: true})
+
     }
 
     static getLoginUrl(redirectUrl){

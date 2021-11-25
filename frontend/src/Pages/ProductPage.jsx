@@ -22,10 +22,9 @@ const ProductPage = () => {
 
     const bookProduct = async () => {
         try {
-            const res = await BookingService.Book(params.id)
+            await BookingService.Book(params.id)
             setYouBooked(true)
             setInfo({...productInfo, queue_len: productInfo.queue_len + 1, is_booking: true})
-            console.log(productInfo.is_booked)
         }
         catch (e){
             if (e.response?.status === 409){

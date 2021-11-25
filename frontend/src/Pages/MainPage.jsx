@@ -4,14 +4,21 @@ import AdvertsPanel from "../components/AdvertsPanel";
 import AdvertServices from "../API/AdvertServices";
 import FilterPanel from "../components/FilterPanel/FilterPanel";
 import FilterByBooking from "../components/FilterPanel/FilterByBooking";
+import {useParams} from 'react-router-dom'
+import UserServeces from "../API/UserServeces";
 
 const MainPage = () => {
     const [products, setProducts] = useState([])
     const [productFilter, setProductFilter] = useState({})
+    const params = useParams()
 
     useEffect(() => {
         getProducts()
     }, [productFilter])
+
+    useEffect(() => {
+        UserServeces.logout()
+    }, [])
 
     async function getProducts(){
         const products = await AdvertServices.getAll(productFilter)

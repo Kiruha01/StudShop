@@ -17,21 +17,22 @@ class BookingListView(Resource):
         Product.query.get_or_404(product_id)
         return Booking.query.filter_by(product_id=product_id).all()
 
-    # @login_required
+    @login_required
     def post(self, product_id):
         Product.query.get_or_404(product_id)
-        if Booking.query.filter_by(product_id=product_id, user_id=2).first():
+        if Booking.query.filter_by(product_id=product_id, user_id=current_user.user_id).first():
             return {'message': 'Already booked by you'}, 409
 
-        book = Booking(user_id=2, product_id=product_id)
+        book = Booking(user_id=current_user.user_id, product_id=product_id)
         db.session.add(book)
         db.session.commit()
         return book.booking_id, 201
 
-    # @login_required
+    @login_required
     def delete(self, product_id):
+        print(current_user.user_id)
         Product.query.get_or_404(product_id)
-        book = Booking.query.filter_by(product_id=product_id, user_id=2).first()
+        book = Booking.query.filter_by(product_id=product_id, user_id=current_user.user_id).first()
         if book:
             db.session.delete(book)
             db.session.commit()
