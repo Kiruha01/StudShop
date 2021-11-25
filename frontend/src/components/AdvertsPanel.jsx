@@ -2,6 +2,7 @@ import React from 'react';
 import AdvertCard from "./AdvertsCard/AdvertCard";
 
 const AdvertsPanel = ({products}) => {
+    console.log(products)
     return (
         <div className="d-flex">
             {products.map(pr =>

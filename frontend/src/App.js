@@ -9,7 +9,7 @@ import ProfilePage from "./Pages/ProfilePega";
 function App() {
     const [userInfo, setUserInfo] = useState({})
     useEffect(async () => {
-        const curentUserInfo = await UserServises.getInfoAboutMe()
+        const curentUserInfo = await UserServises.getInfo('')
             setUserInfo(curentUserInfo)
     }, [])
 
