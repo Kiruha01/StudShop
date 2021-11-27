@@ -7,6 +7,7 @@ import OwnerName from "../components/AdvertsCard/OwnerName";
 import classes from "../components/AdvertsCard/AdvertVard.module.css";
 import QueueList from "../components/Queue/QueueList";
 import BookingService from "../API/BookingService";
+import EditAdvert from "../components/ModalWindows/EditAdvert";
 
 const ProductPage = ({user}) => {
     const params = useParams()
@@ -67,6 +68,7 @@ const ProductPage = ({user}) => {
 
     return (
         <div className="container-fluid">
+            <EditAdvert product={productInfo} setProduct={setInfo}/>
             <div className="row mt-3">
                 <div className="col-4" style={{position: "relative"}}>
                     {productInfo.is_booking ? <RoundLabel color_class={"bg-dark " + classes.text}>Забронированно</RoundLabel> : ''}
@@ -86,7 +88,7 @@ const ProductPage = ({user}) => {
                         : ''}
                     {user.user_id === productInfo.owner.user_id?
                     <div className="d-flex">
-                        <button className="btn btn-dark flex-fill"
+                        <button className="btn btn-dark flex-fill" data-bs-toggle="modal" data-bs-target="#createAdvert"
                         >Редактировать</button>
                         </div>
                         : '' }
