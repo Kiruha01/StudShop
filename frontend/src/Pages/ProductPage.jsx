@@ -70,7 +70,7 @@ const ProductPage = ({user}) => {
             <div className="row mt-3">
                 <div className="col-4" style={{position: "relative"}}>
                     {productInfo.is_booking ? <RoundLabel color_class={"bg-dark " + classes.text}>Забронированно</RoundLabel> : ''}
-                    <CaroselPhoto pictures={productInfo.pictures}/>
+                    {productInfo.pictures.length? <CaroselPhoto pictures={productInfo.pictures}/> : ''}
                     {user.user_id !== productInfo.owner.user_id ?
                         <div className="d-flex justify-content-between">
                             {!youBooked ?
@@ -84,6 +84,12 @@ const ProductPage = ({user}) => {
                             </div>
                         </div>
                         : ''}
+                    {user.user_id === productInfo.owner.user_id?
+                    <div className="d-flex">
+                        <button className="btn btn-dark flex-fill"
+                        >Редактировать</button>
+                        </div>
+                        : '' }
                     {user.user_id === productInfo.owner.user_id && productInfo.is_active ?
                         <div className="d-flex">
                             <button className="btn btn-danger flex-fill"

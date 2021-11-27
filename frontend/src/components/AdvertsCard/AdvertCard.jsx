@@ -6,7 +6,8 @@ import {Link} from "react-router-dom";
 
 const AdvertCard = ({product}) => {
     return (
-        <div className={"card m-2 " + classes.shadow}>
+        <div className="col mb-3">
+        <div className={"card " + classes.shadow}>
             <div className={"h-100 " + classes.image}>
                 {product.is_booking ? <RoundLabel color_class={"bg-dark " + classes.text}>Забронированно</RoundLabel> : ''}
                 {!product.is_active ? <RoundLabel color_class={"bg-danger " + classes.closed}>Закрыто</RoundLabel> : ''}
@@ -30,6 +31,7 @@ const AdvertCard = ({product}) => {
             <div className="d-flex flex-row-reverse card-body mt-0">
                 <OwnerName name={product.owner.name} user_id={product.owner.user_id}/>
             </div>
+        </div>
         </div>
     );
 };

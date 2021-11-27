@@ -13,10 +13,10 @@ export default class AdvertServices{
         try {
             const response = await axios.post('http://localhost:5000/api/products/', params)
             console.log(response.data)
-            return response.data
+            return response
         }
         catch (e){
-            return null
+            return e.response
         }
     }
 

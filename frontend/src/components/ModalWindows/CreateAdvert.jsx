@@ -3,10 +3,16 @@ import InputForm from "./InputForm";
 import CategoryService from "../../API/CategoryService";
 import LocationService from "../../API/LocationService";
 import AdvertServices from "../../API/AdvertServices";
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreateAdvert = () => {
     const [categories, setCategories] = useState([])
     const [locations, setLocations] = useState([])
+    const navigate = useNavigate();
+
+    const closeButton = useRef()
 
     const newName = useRef()
     const newPrice = useRef()
@@ -17,28 +23,64 @@ const CreateAdvert = () => {
     useEffect(async () => {
         setCategories(await CategoryService.getAll())
         setLocations(await LocationService.getAll())
-
     }, [])
 
-    const create = async () => {
+    const create = async (e) => {
         const data = {
-            name: newName.current.value,
-            price: newPrice.current.value,
-            description: newDescription.current.value,
-            location_id: newLocation.current.value,
-            category_id: newCategory.current.value
+            name: newName.current.value || undefined,
+            price: newPrice.current.value || undefined,
+            description: newDescription.current.value || undefined,
+            location_id: newLocation.current.value || undefined,
+            category_id: newCategory.current.value || undefined
         }
-        await AdvertServices.create(data)
+        const res = await AdvertServices.create(data)
+        if (res.status !== 201){
+            console.log(res.data)
+            toast.error(JSON.stringify(res.data.message), {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        else{
+            toast.success("Ваше объявление создано!", {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+            closeButton.current.click()
+            navigate('/product/' + res.data)
+        }
     }
 
 
     return (
         <div className="modal fade" tabIndex="-1" id="createAdvert">
+            <ToastContainer
+                position="top-left"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                />
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">Modal title</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                id='close' ref={closeButton}>s</button>
                     </div>
                     <div className="modal-body">
                         <InputForm name="Название">
@@ -71,7 +113,8 @@ const CreateAdvert = () => {
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" className="btn btn-primary" onClick={create}>Save changes</button>
+                        <button type="button" className="btn btn-primary"
+                                onClick={create}>Save changes</button>
                     </div>
                 </div>
             </div>
