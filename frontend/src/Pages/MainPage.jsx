@@ -6,6 +6,7 @@ import FilterPanel from "../components/FilterPanel/FilterPanel";
 import FilterByBooking from "../components/FilterPanel/FilterByBooking";
 import {useParams} from 'react-router-dom'
 import UserServeces from "../API/UserServeces";
+import CreateAdvert from "../components/ModalWindows/CreateAdvert";
 
 const MainPage = () => {
     const [products, setProducts] = useState([])
@@ -29,7 +30,8 @@ const MainPage = () => {
         <div className="container-fluid">
             <div className="row pt-2">
                 <div className="col-3 p-3 d-flex flex-column">
-                    <button className="btn btn-light">+ Создать объявление</button>
+                    <button className="btn btn-light" data-bs-toggle="modal" data-bs-target="#createAdvert">+ Создать объявление</button>
+                    <CreateAdvert/>
                 </div>
                 <div className="col p-3">
                     {/*<SearchPanel/>*/}

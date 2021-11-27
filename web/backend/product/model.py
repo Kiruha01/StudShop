@@ -67,6 +67,7 @@ product_fields_small = {
     'owner': fields.Nested(user_fields),
     'pictures': fields.Nested(picture_field, allow_null=True),
     'is_booking': fields.Boolean,
+    'is_active': fields.Boolean,
 }
 product_fields = product_fields_small.copy()
 

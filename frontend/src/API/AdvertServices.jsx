@@ -9,6 +9,17 @@ export default class AdvertServices{
         return response.data
     }
 
+    static async create(params) {
+        try {
+            const response = await axios.post('http://localhost:5000/api/products/', params)
+            console.log(response.data)
+            return response.data
+        }
+        catch (e){
+            return null
+        }
+    }
+
     static async getById(id) {
         try {
             const response = await axios.get('http://localhost:5000/api/products/' + id + '/')
