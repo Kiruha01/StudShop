@@ -5,7 +5,7 @@ import AdvertsPanel from "../components/AdvertsPanel";
 import AdvertServices from "../API/AdvertServices";
 import {useParams} from 'react-router-dom'
 
-const ProfilePage = ({user, setUser}) => {
+const ProfilePage = ({user}) => {
     const [products, setProducts] = useState([])
     const [curUser, setCurUser] = useState([])
     const params = useParams()
