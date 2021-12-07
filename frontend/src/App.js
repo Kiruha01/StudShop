@@ -7,13 +7,18 @@ import ProductPage from "./Pages/ProductPage";
 import ProfilePage from "./Pages/ProfilePega";
 import {useAuth0} from "@auth0/auth0-react";
 import axios from "axios";
+import UserServeces from "./API/UserServeces";
+import {useFetching} from "./hooks/useFetching";
 
 function App() {
-    const { user, isAuthenticated, isLoading } = useAuth0()
+    const { user, isAuthenticated } = useAuth0()
     const {getAccessTokenSilently} = useAuth0()
-    useEffect(async ()=>{
+    const [fun, isLoading] = useFetching(async ()=> {
         if (isAuthenticated)
-            axios.defaults.headers.common['Authorization'] = "Bearer " + await getAccessTokenSilently();
+            axios.defaults.headers.common['Authorization'] = "Bearer " + await getAccessTokenSilently()
+    })
+    useEffect(async ()=>{
+fun()
     }, [user])
 
   return (
@@ -32,7 +37,7 @@ function App() {
                       <Route path="/product/:id" element={<ProductPage user={user} isAuth={isAuthenticated}/>}/>
                   </Routes>
                   <Routes>
-                      <Route exact path="/profile" element={<ProfilePage user={user}/>}/>
+                      <Route exact path="/profile" element={<ProfilePage user={user} isAuth={isAuthenticated}/>}/>
                   </Routes>
                   <Routes>
                       <Route exact path="/profile/:id" element={<ProfilePage user={user}/>}/>

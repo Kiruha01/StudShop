@@ -15,7 +15,7 @@ const MainPage = () => {
     const [productFilter, setProductFilter] = useState({})
     const params = useParams()
     const [getProducts, isLoading, errors] = useFetching(async () => {
-        const products = await AdvertServices.getAll({...productFilter, is_active: true})
+        const products = await AdvertServices.getAll({...productFilter})
         setProducts(products)
     })
 

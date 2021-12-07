@@ -4,40 +4,45 @@ import List from "../components/DealsList/List";
 import AdvertsPanel from "../components/AdvertsPanel";
 import AdvertServices from "../API/AdvertServices";
 import {useParams} from 'react-router-dom'
+import {useFetching} from "../hooks/useFetching";
+import Loader from "../components/Loader";
 
-const ProfilePage = ({user}) => {
+const ProfilePage = ({user, isAuth}) => {
     const [products, setProducts] = useState([])
-    const [curUser, setCurUser] = useState({})
+    const [curUser, setCurUser] = useState(null)
     const params = useParams()
-    useEffect(async ()=> {
-        if (params.id){
-            const res = await UserServeces.getInfoById(params.id)
-            setCurUser(res)
-        }
-        else{
-            const res = await UserServeces.getInfo()
-            setCurUser(res)
-        }
-    }, [])
+    const [getInfo, isLoading] = useFetching(async () => {
+            if (params.id) {
+                setCurUser(await UserServeces.getInfoById(params.id))
+            } else {
+                setCurUser(await UserServeces.getInfo())
 
-    useEffect(async () => {
-        const res = await AdvertServices.getAll({my: true})
-        setProducts(res)
+            const res = await AdvertServices.getAll({my: true})
+            setProducts(res)
+        }
+    })
+    useEffect(async ()=> {
+        await getInfo()
     }, [])
 
     return (
-        <div className="container">
-            <div className="row">
-                <h1>Данные профиля</h1>
-                <div className="row">
-                    <div className="col-3">
-                        <span>Имя</span>
-                    </div>
-                    <div className="col">
-                        <span>{curUser.name}</span>
-                    </div>
-                </div>
-                <div className="row">
+        <div>
+        {
+            isLoading || !curUser?
+                <Loader/>
+                :
+                <div className="container">
+                    <div className="row">
+                        <h1>Данные профиля</h1>
+                        <div className="row">
+                            <div className="col-3">
+                                <span>Имя</span>
+                            </div>
+                            <div className="col">
+                                <span>{curUser.name}</span>
+                            </div>
+                        </div>
+                        <div className="row">
 
                     <div className="col-3">
                         <span>Способ связи</span>
@@ -60,14 +65,16 @@ const ProfilePage = ({user}) => {
                 </div>
             </div>
 
-            {params.id ?
-                ''
-                :
-                <div className="row">
-                    <h1>Ваши объявления</h1>
-                    <AdvertsPanel products={products}/>
+                    {params.id ?
+                        ''
+                        :
+                        <div className="row">
+                            <h1>Ваши объявления</h1>
+                            <AdvertsPanel products={products}/>
+                        </div>
+                    }
                 </div>
-            }
+        }
         </div>
     );
 };

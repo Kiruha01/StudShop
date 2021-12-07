@@ -15,13 +15,13 @@ const EditAdvert = ({product, setProduct}) => {
     const [locations, setLocations] = useState([])
 
     useEffect(async () => {
-        setNewProduct({...product, location_id: product.location.location_id, category_id: product.category?.category_id})
+        setNewProduct({...product, location_id: product.location.id, category_id: product.category?.id})
         setCategories(await CategoryService.getAll())
         setLocations(await LocationService.getAll())
     }, [product])
 
     async function edit(){
-        const response = await AdvertServices.edit(product.product_id, newProduct)
+        const response = await AdvertServices.edit(product.id, newProduct)
         if (response.status !== 204){
             toast.error("Some error!")
         }

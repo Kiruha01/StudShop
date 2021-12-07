@@ -3,7 +3,7 @@ import axios from "axios";
 export default class LocationService{
     static async getAll() {
         try {
-            const response = await axios.get('http://localhost:5000/api/locations/'
+            const response = await axios.get('https://fadverts-kirill.azurewebsites.net/api/Location/'
             )
             return response.data
         } catch (e) {

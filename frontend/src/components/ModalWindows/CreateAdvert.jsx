@@ -28,7 +28,7 @@ const CreateAdvert = () => {
     const create = async (e) => {
         const data = {
             name: newName.current.value || undefined,
-            price: newPrice.current.value || undefined,
+            price: parseInt(newPrice.current.value, 10) || undefined,
             description: newDescription.current.value || undefined,
             location_id: newLocation.current.value || undefined,
             category_id: newCategory.current.value || undefined
@@ -57,7 +57,7 @@ const CreateAdvert = () => {
                 progress: undefined,
             });
             closeButton.current.click()
-            navigate('/product/' + res.data)
+            navigate('/product/' + res.data.id)
         }
     }
 
@@ -96,7 +96,7 @@ const CreateAdvert = () => {
                             <select className="form-select" aria-label="Default select example" ref={newLocation}>
                                 <option selected disabled> </option>
                                 {locations.map(item =>
-                                    <option value={item.location_id}>{item.name}</option>
+                                    <option value={item.id}>{item.name}</option>
                                 )}
                             </select>
                         </InputForm>
@@ -104,7 +104,7 @@ const CreateAdvert = () => {
                             <select className="form-select" aria-label="Default select example" ref={newCategory}>
                                 <option selected disabled> </option>
                                 {categories.map(item =>
-                                <option value={item.category_id}>{item.name}</option>
+                                <option value={item.id}>{item.name}</option>
                                 )}
                             </select>
                         </InputForm>

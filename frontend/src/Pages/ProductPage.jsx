@@ -30,7 +30,7 @@ const ProductPage = ({user, isAuth}) => {
         try {
             await BookingService.Book(params.id)
             setYouBooked(true)
-            setInfo({...productInfo, queue_len: productInfo.queue_len + 1, is_booking: true})
+            setInfo({...productInfo, len_of_qeue: productInfo.len_of_qeue + 1, is_booking: true})
         }
         catch (e){
             if (e.response?.status === 409){
@@ -43,7 +43,7 @@ const ProductPage = ({user, isAuth}) => {
         try {
             const res = await BookingService.Unbook(params.id)
             setYouBooked(false)
-            setInfo({...productInfo, queue_len: productInfo.queue_len - 1, is_booking: productInfo.queue_len - 1 > 0})
+            setInfo({...productInfo, len_of_qeue: productInfo.len_of_qeue - 1, is_booking: productInfo.len_of_qeue - 1 > 0})
 
         }
         catch (e){
@@ -54,7 +54,7 @@ const ProductPage = ({user, isAuth}) => {
     }
 
     const openProduct = async () => {
-        const r = await AdvertServices.set_is_active(productInfo.product_id, true)
+        const r = await AdvertServices.set_is_active(productInfo.id, true)
         if (r.status !== 204){
             alert(r.data)
         }
@@ -63,7 +63,7 @@ const ProductPage = ({user, isAuth}) => {
 
     }
     const closeProduct = async () => {
-        const r = await AdvertServices.set_is_active(productInfo.product_id, false)
+        const r = await AdvertServices.set_is_active(productInfo.id, false)
         if (r.status !== 204){
             alert(r.data)
         }
@@ -83,7 +83,7 @@ const ProductPage = ({user, isAuth}) => {
                             {productInfo.is_booking ?
                                 <RoundLabel color_class={"bg-dark " + classes.text}>Забронированно</RoundLabel> : ''}
                             {productInfo.pictures.length ? <CaroselPhoto pictures={productInfo.pictures}/> : ''}
-                            {isAuth && user.user_id !== productInfo.owner.user_id ?
+                            {isAuth && user.sub !== productInfo.owner.id ?
                                 <div className="d-flex justify-content-between">
                                     {!youBooked ?
                                         <button className="btn btn-success" onClick={bookProduct}>Забронировать
@@ -93,11 +93,11 @@ const ProductPage = ({user, isAuth}) => {
                                             продукт</button>
                                     }
                                     <div>Людей в очереди <span
-                                        className="badge rounded-pill bg-success align-self-end">{productInfo.queue_len}</span>
+                                        className="badge rounded-pill bg-success align-self-end">{productInfo.len_of_qeue}</span>
                                     </div>
                                 </div>
                                 : ''}
-                            {isAuth && user.user_id === productInfo.owner.user_id ?
+                            {isAuth && user.sub === productInfo.owner.id ?
                                 <div className="d-flex">
                                     <button className="btn btn-dark flex-fill" data-bs-toggle="modal"
                                             data-bs-target="#createAdvert"
@@ -105,14 +105,14 @@ const ProductPage = ({user, isAuth}) => {
                                     </button>
                                 </div>
                                 : ''}
-                            {isAuth && user.user_id === productInfo.owner.user_id && productInfo.is_active ?
+                            {isAuth && user.sub === productInfo.owner.id && productInfo.is_active ?
                                 <div className="d-flex">
                                     <button className="btn btn-danger flex-fill"
                                             onClick={closeProduct}>Закрыть объявление
                                     </button>
                                 </div>
                                 : ''}
-                            {isAuth && user.user_id === productInfo.owner.user_id && !productInfo.is_active ?
+                            {isAuth && user.sub === productInfo.owner.id && !productInfo.is_active ?
                                 <div className="d-flex">
                                     <button className="btn btn-light flex-fill"
                                             onClick={openProduct}>Открыть повторно
@@ -149,13 +149,13 @@ const ProductPage = ({user, isAuth}) => {
                             <div>
                                 <h3>Продавец</h3>
                                 <div className="d-flex mx-3">
-                                    <OwnerName name={productInfo.owner.name} user_id={productInfo.owner.user_id}/>
+                                    <OwnerName name={productInfo.owner.name} user_id={productInfo.owner.id}/>
                                     <p className="mx-2">{productInfo.owner.com_method}</p>
                                 </div>
                             </div>
                             <br/>
-                            {isAuth && user.user_id === productInfo.owner.user_id ?
-                                <QueueList product_id={productInfo.product_id}/>
+                            {isAuth && user.sub === productInfo.owner.id ?
+                                <QueueList product_id={productInfo.id}/>
                                 :
                                 ""
                             }
