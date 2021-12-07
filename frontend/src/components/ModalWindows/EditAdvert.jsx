@@ -15,7 +15,7 @@ const EditAdvert = ({product, setProduct}) => {
     const [locations, setLocations] = useState([])
 
     useEffect(async () => {
-        setNewProduct({...product, location_id: product.location.location_id, category_id: product.category.category_id})
+        setNewProduct({...product, location_id: product.location.location_id, category_id: product.category?.category_id})
         setCategories(await CategoryService.getAll())
         setLocations(await LocationService.getAll())
     }, [product])

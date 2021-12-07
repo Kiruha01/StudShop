@@ -3,7 +3,7 @@ import axios from "axios";
 export default class UserServeces{
     static async getInfo() {
         try {
-            const response = await axios.get('http://localhost:5000/api/user/'
+            const response = await axios.get('https://fadverts-kirill.azurewebsites.net/api/User/'
             )
             console.log('!' + response.status)
             return response.data
@@ -22,7 +22,7 @@ export default class UserServeces{
 
     static async getInfoById(id) {
         try {
-            const response = await axios.get('http://localhost:5000/api/user/' + id + '/'
+            const response = await axios.get('https://fadverts-kirill.azurewebsites.net/api/User/' + id + '/'
             )
             console.log('!' + response.status)
             return response.data
@@ -41,7 +41,7 @@ export default class UserServeces{
 
     static async updateComMethod(user_id, method) {
         try {
-            const response = await axios.put('http://localhost:5000/api/user/' + (user_id ? (user_id + '/') : ''), {
+            const response = await axios.put('https://fadverts-kirill.azurewebsites.net/api/User/' + (user_id ? (user_id + '/') : ''), {
                 com_method: method
                 }
             )
@@ -61,7 +61,7 @@ export default class UserServeces{
 
     static async getAllDeals(user_id) {
         try {
-            const response = await axios.get('http://localhost:5000/api/user/' + user_id + '/deals/'
+            const response = await axios.get('https://fadverts-kirill.azurewebsites.net/api/User/' + user_id + '/deals/'
             )
             return response.data
         } catch (e) {

@@ -7,7 +7,7 @@ import {useParams} from 'react-router-dom'
 
 const ProfilePage = ({user}) => {
     const [products, setProducts] = useState([])
-    const [curUser, setCurUser] = useState([])
+    const [curUser, setCurUser] = useState({})
     const params = useParams()
     useEffect(async ()=> {
         if (params.id){
@@ -15,9 +15,10 @@ const ProfilePage = ({user}) => {
             setCurUser(res)
         }
         else{
-            setCurUser(user)
+            const res = await UserServeces.getInfo()
+            setCurUser(res)
         }
-    })
+    }, [])
 
     useEffect(async () => {
         const res = await AdvertServices.getAll({my: true})
@@ -34,15 +35,6 @@ const ProfilePage = ({user}) => {
                     </div>
                     <div className="col">
                         <span>{curUser.name}</span>
-                    </div>
-                </div>
-                <div className="row">
-
-                    <div className="col-3">
-                        <span>Почта</span>
-                    </div>
-                    <div className="col">
-                        <span>{curUser.email}</span>
                     </div>
                 </div>
                 <div className="row">
@@ -66,11 +58,6 @@ const ProfilePage = ({user}) => {
                                     onClick={() => UserServeces.updateComMethod('', curUser.com_method)}>Сохранить изменения</button>
                         </div>}
                 </div>
-            </div>
-
-            <div className="row">
-                <h1>Совершённые сделки</h1>
-                <List user_id={curUser.user_id}/>
             </div>
 
             {params.id ?
