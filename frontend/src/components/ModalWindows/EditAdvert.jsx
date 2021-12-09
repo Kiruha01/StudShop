@@ -39,7 +39,7 @@ const EditAdvert = ({product, setProduct}) => {
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">Modal title</h5>
+                        <h5 className="modal-title">Редактировать объявление</h5>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
                                 id='close' ref={closeButton}></button>
                     </div>
@@ -83,9 +83,9 @@ const EditAdvert = ({product, setProduct}) => {
                     </div>
 
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
                         <button type="button" className="btn btn-primary"
-                                onClick={edit}>Save changes</button>
+                                onClick={edit}>Сохранить</button>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request
 from flask_restful import Resource, Api, marshal_with, reqparse, inputs
 from sqlalchemy import func, sql
 
@@ -9,6 +9,7 @@ from backend.deals.model import Booking
 from backend.database import db
 from backend.utils import remove_none_filters
 from backend.utils import login_required
+from backend.utils import save_photo
 
 from backend.deals.route import BookingListView, ApproveBooking, BookingView
 
@@ -118,8 +119,11 @@ class PictureView(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('url', type=str, required=True)
 
-    @login_required
+    # @login_required
     def post(self, product_id):
+        print(request.files['image'])
+        url = save_photo(request.files['image'].stream.read())
+        print(url)
         prod = Product.query.get_or_404(product_id)
         if prod.owner_id != current_user.user_id:
             return {"message": "Only for owner"}, 403
@@ -127,7 +131,7 @@ class PictureView(Resource):
         pic = Picture(**args, product_id=product_id)
         db.session.add(pic)
         db.session.commit()
-        return '', 204
+        return url, 200
 
 
 class PictureItemView(Resource):

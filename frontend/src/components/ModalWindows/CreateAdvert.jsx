@@ -6,6 +6,7 @@ import AdvertServices from "../../API/AdvertServices";
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import NumberInput from "./NumberInput";
 
 const CreateAdvert = () => {
     const [categories, setCategories] = useState([])
@@ -78,7 +79,7 @@ const CreateAdvert = () => {
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">Modal title</h5>
+                        <h5 className="modal-title">Создать объявление</h5>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
                                 id='close' ref={closeButton}></button>
                     </div>
@@ -87,7 +88,9 @@ const CreateAdvert = () => {
                             <input type="text" className="form-control" ref={newName}/>
                         </InputForm>
                         <InputForm name="Цена">
-                            <input type="number" className="form-control" ref={newPrice}/>
+                            <NumberInput ref={newPrice}/>
+                            {/*<input type="number" pattern="[0-9]*"*/}
+                            {/*       className="form-control" ref={newPrice}/>*/}
                         </InputForm>
                         <InputForm name="Описание">
                             <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" ref={newDescription}/>
@@ -112,9 +115,9 @@ const CreateAdvert = () => {
 
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                         <button type="button" className="btn btn-primary"
-                                onClick={create}>Save changes</button>
+                                onClick={create}>Сохранить</button>
                     </div>
                 </div>
             </div>
