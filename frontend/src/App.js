@@ -15,7 +15,7 @@ function App() {
     const [fun, isLoading] = useFetching(async ()=> {
         if (isAuthenticated) {
             axios.defaults.headers.common['Authorization'] = "Bearer " + await getAccessTokenSilently()
-            const resp = UserServises.getInfo()
+            const resp = await UserServises.getInfo()
             if (resp == null) {
                 await UserServises.login()
             }

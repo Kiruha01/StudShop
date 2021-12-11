@@ -8,11 +8,6 @@ export default class UserServeces{
             return response.data
         } catch (e) {
             if (e.response) {
-                if (e.response.status === 401)
-                    return null
-
-            }
-            else {
                 return null
             }
         }
@@ -76,7 +71,9 @@ export default class UserServeces{
 
 
     static async login(){
-        await axios.post('https://fadverts-kirill.azurewebsites.net/api/User/')
+        console.log('Send post')
+        const r = await axios.post('https://fadverts-kirill.azurewebsites.net/api/User/')
+        console.log(r)
     }
 
     static async logout(){
