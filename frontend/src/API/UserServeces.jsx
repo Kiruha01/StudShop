@@ -3,7 +3,7 @@ import axios from "axios";
 export default class UserServeces{
     static async getInfo() {
         try {
-            const response = await axios.get('https://fadverts-kirill.azurewebsites.net/api/User/'
+            const response = await axios.get('http://localhost:5000/api/user/'
             )
             return response.data
         } catch (e) {
@@ -15,7 +15,7 @@ export default class UserServeces{
 
     static async getInfoById(id) {
         try {
-            const response = await axios.get('https://fadverts-kirill.azurewebsites.net/api/User/' + id + '/'
+            const response = await axios.get('http://localhost:5000/api/user/' + id + '/'
             )
             return response.data
         } catch (e) {
@@ -33,7 +33,7 @@ export default class UserServeces{
 
     static async updateComMethod(user_id, method) {
         try {
-            return await axios.put('https://fadverts-kirill.azurewebsites.net/api/User/' + (user_id ? (user_id + '/') : ''), {
+            const response = await axios.put('http://localhost:5000/api/user/' + (user_id ? (user_id + '/') : ''), {
                 com_method: method
                 }
             ).data
@@ -52,7 +52,7 @@ export default class UserServeces{
 
     static async getAllDeals(user_id) {
         try {
-            const response = await axios.get('https://fadverts-kirill.azurewebsites.net/api/User/' + user_id + '/deals/'
+            const response = await axios.get('http://localhost:5000/api/user/' + user_id + '/deals/'
             )
             return response.data
         } catch (e) {
@@ -72,8 +72,7 @@ export default class UserServeces{
 
     static async login(){
         console.log('Send post')
-        const r = await axios.post('https://fadverts-kirill.azurewebsites.net/api/User/')
-        console.log(r)
+        const r = await axios.get('http://localhost:5000/login')
     }
 
     static async logout(){

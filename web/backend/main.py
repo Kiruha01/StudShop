@@ -43,11 +43,11 @@ def create_app():
 
     @login_manager.request_loader
     def load_user_from_request(request):
-        # auth_header = request.headers.get('Authorization')
-        # user_id = User.decode_auth_token(auth_header)
-        # if isinstance(user_id, str):
-        #     return None
-        user = User.query.get_or_404(1)
+        auth_header = request.headers.get('Authorization')
+        user_id = User.decode_auth_token(auth_header)
+        if isinstance(user_id, str):
+            return None
+        user = User.query.get_or_404(user_id)
         return user
 
     client = WebApplicationClient(app.config['GOOGLE_CLIENT_ID'])

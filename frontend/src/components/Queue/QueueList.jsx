@@ -12,7 +12,7 @@ const QueueList = ({product_id}) => {
 
     const  deleteBookById = async (id) => {
         await BookingService.deleteBooking(product_id, id)
-        setQueue(qeue.filter((el) => el.id !== id))
+        setQueue(qeue.filter((el) => el.booking_id !== id))
     }
 
     useEffect(() => {

@@ -44,6 +44,7 @@ class ProductListView(Resource):
     parser2 = reqparse.RequestParser()
     parser2.add_argument('is_booking')
     parser2.add_argument('is_active')
+    parser2.add_argument('owner')
     parser2.add_argument('my')
 
 
@@ -53,7 +54,7 @@ class ProductListView(Resource):
     def get(self):
         args = remove_none_filters(self.parser2.parse_args())
         q = get_products_with_is_booking(is_active=args.get('is_active'),
-                                         user_id=current_user.user_id if args.get('my') else None)
+                                         user_id=current_user.user_id if args.get('my') else args.get('owner'))
 
         out = []
         for prod, queue, book in q:

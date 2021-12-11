@@ -64,7 +64,7 @@ const CreateAdvert = () => {
                 draggable: true,
                 progress: undefined,
             });
-            return res.data.id
+            return res.data.product_id
         }
     })
 
@@ -115,16 +115,18 @@ const CreateAdvert = () => {
                             <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" ref={newDescription}/>
                         </InputForm>
                         <InputForm name="Расположение">
-                            <select className="form-select" aria-label="Default select example" ref={newLocation} defaultValue={undefined}>
+                            <select className="form-select" aria-label="Default select example" ref={newLocation}>
+                                <option selected disabled> </option>
                                 {locations.map(item =>
-                                    <option value={item.id} key={item.id}>{item.name}</option>
+                                    <option value={item.location_id}>{item.name}</option>
                                 )}
                             </select>
                         </InputForm>
                         <InputForm name="Категория">
-                            <select className="form-select" aria-label="Default select example" ref={newCategory} defaultValue={undefined}>
+                            <select className="form-select" aria-label="Default select example" ref={newCategory}>
+                                <option selected disabled> </option>
                                 {categories.map(item =>
-                                <option value={item.id} key={item.id}>{item.name}</option>
+                                <option value={item.category_id}>{item.name}</option>
                                 )}
                             </select>
                         </InputForm>

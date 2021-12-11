@@ -15,10 +15,10 @@ const EditAdvert = ({product, setProduct}) => {
     const [categories, setCategories] = useState([])
     const [locations, setLocations] = useState([])
     const [f, isLoading] = useFetching(async ()=>{
-        return await AdvertServices.edit(product.id, newProduct)
+        return await AdvertServices.edit(product.product_id, newProduct)
     })
     const [uploadFile, isUploading] = useFetching(async (formData)=>{
-        const r =  await AdvertServices.add_photo(product.id, formData)
+        const r =  await AdvertServices.add_photo(product.product_id, formData)
         if (r.status !== 201){
             toast.error("Фото не было добавлено", {
                 position: "top-left",
@@ -51,7 +51,7 @@ const EditAdvert = ({product, setProduct}) => {
         else {
             setProduct({
                 ...product, pictures: product.pictures.filter((p) => {
-                return p.id !== id
+                return p.picture_id !== id
                 })
             })
         }
@@ -59,7 +59,7 @@ const EditAdvert = ({product, setProduct}) => {
 
     useEffect(() => {
         async function fetch() {
-            setNewProduct({...product, location_id: product.location.id, category_id: product.category?.id})
+            setNewProduct({...product, location_id: product.location.location_id, category_id: product.category?.category_id})
             setCategories(await CategoryService.getAll())
             setLocations(await LocationService.getAll())
         }
@@ -69,11 +69,11 @@ const EditAdvert = ({product, setProduct}) => {
 
     async function edit(){
         const response = await f()
-        if (response.status !== 200){
+        if (response.status !== 204){
             toast.error("Some error!")
         }
         else{
-            const prod = (await AdvertServices.getById(product.id)).data
+            const prod = (await AdvertServices.getById(product.product_id)).data
             setProduct(prod)
             closeButton.current.click()
         }
@@ -114,7 +114,7 @@ const EditAdvert = ({product, setProduct}) => {
                                     onChange={(e) => setNewProduct({...newProduct, location_id: e.target.value})}>
                                 <option selected disabled> </option>
                                 {locations.map(item =>
-                                    <option value={item.id}>{item.name}</option>
+                                    <option value={item.location_id}>{item.name}</option>
                                 )}
                             </select>
                         </InputForm>
@@ -123,7 +123,7 @@ const EditAdvert = ({product, setProduct}) => {
                                     onChange={(e) => setNewProduct({...newProduct, category_id: e.target.value})}>
                                 <option selected disabled> </option>
                                 {categories.map(item =>
-                                    <option value={item.id}>{item.name}</option>
+                                    <option value={item.category_id}>{item.name}</option>
                                 )}
                             </select>
                         </InputForm>

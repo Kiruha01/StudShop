@@ -5,8 +5,9 @@ import AdvertServices from "../API/AdvertServices";
 import {useParams} from 'react-router-dom'
 import {useFetching} from "../hooks/useFetching";
 import Loader from "../components/Loader";
+import List from "../components/DealsList/List";
 
-const ProfilePage = ({user, isAuth}) => {
+const ProfilePage = ({user}) => {
     const [products, setProducts] = useState([])
     const [curUser, setCurUser] = useState(null)
     const params = useParams()
@@ -16,7 +17,7 @@ const ProfilePage = ({user, isAuth}) => {
                 const res = await AdvertServices.getAll({owner: params.id})
                 setProducts(res)
             } else {
-                setCurUser(await UserServeces.getInfo())
+                setCurUser(user)
                 const res = await AdvertServices.getAll({my: true})
                 setProducts(res)
         }
@@ -52,6 +53,15 @@ const ProfilePage = ({user, isAuth}) => {
                         <div className="row">
 
                     <div className="col-3">
+                        <span>Почта</span>
+                    </div>
+                    <div className="col">
+                        <span>{curUser.email}</span>
+                    </div>
+                </div>
+                <div className="row">
+
+                    <div className="col-3">
                         <span>Способ связи</span>
                     </div>
                     <div className="col">
@@ -78,6 +88,10 @@ const ProfilePage = ({user, isAuth}) => {
                 </div>
             </div>
 
+            <div className="row">
+                <h1>Совершённые сделки</h1>
+                <List user_id={curUser.user_id}/>
+            </div>
 
                         <div className="row">
                             {params.id ?

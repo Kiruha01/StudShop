@@ -11,7 +11,7 @@ const ImageEdit = ({picture, deletePicture}) => {
             {/*</div>*/}
             <div className="card-footer">
                 <button className="btn" onClick={() => {
-                    deletePicture(picture.id)
+                    deletePicture(picture.picture_id)
                 }}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="firebrick"
                          className="bi bi-trash-fill" viewBox="0 0 16 16">

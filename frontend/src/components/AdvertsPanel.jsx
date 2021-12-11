@@ -9,7 +9,7 @@ const AdvertsPanel = ({products}) => {
             :
             ''}
             {products.map(pr =>
-                <AdvertCard product={pr} key={pr.id}/>
+                <AdvertCard product={pr} key={pr.product_id}/>
             )}
         </div>
     );

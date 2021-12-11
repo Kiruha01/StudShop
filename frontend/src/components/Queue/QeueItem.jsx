@@ -7,7 +7,7 @@ const QeueItem = ({bookingData, delBooking}) => {
                 <div className="col">{bookingData.user.name}</div>
                 <div className="col">{bookingData.user.com_method}</div>
                 <div className="col">{bookingData.date}</div>
-                <button className="col-1 btn" onClick={()=>{delBooking(bookingData.id)}}>
+                <button className="col-1 btn" onClick={()=>{delBooking(bookingData.booking_id)}}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="firebrick"
                          className="bi bi-trash-fill" viewBox="0 0 16 16">
                         <path
