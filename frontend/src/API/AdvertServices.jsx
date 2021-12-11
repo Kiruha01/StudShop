@@ -38,7 +38,17 @@ export default class AdvertServices{
                     'Content-Type': 'multipart/form-data'
                 }
                 }
+            )
+            return response
+        }
+        catch (e){
+            return e.response
+        }
+    }
 
+    static async delete_photo(id) {
+        try {
+            const response = await axios.delete('https://fadverts-kirill.azurewebsites.net/api/pictures/' + id + '/'
             )
             return response
         }
@@ -57,11 +67,9 @@ export default class AdvertServices{
         }
     }
 
-    static async set_is_active(id, is_active) {
+    static async delete(id) {
         try {
-            const response = await axios.put('http://localhost:5000/api/products/' + id + '/', {
-                is_active: is_active
-            })
+            const response = await axios.delete('https://fadverts-kirill.azurewebsites.net/api/Products/' + id + '/')
             return response
         }
         catch (e){

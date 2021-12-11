@@ -1,5 +1,5 @@
 import {React, useMemo, useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import AdvertServices from "../API/AdvertServices";
 import CaroselPhoto from "../components/CaroselPhoto";
 import RoundLabel from "../components/AdvertsCard/RoundLabel";
@@ -21,6 +21,8 @@ const ProductPage = ({user, isAuth}) => {
         setInfo(response.data)
         setYouBooked(response.data.you_booked)
     })
+    const navigate = useNavigate();
+
 
     useEffect(async () => {
         await getInfo()
@@ -53,22 +55,12 @@ const ProductPage = ({user, isAuth}) => {
         }
     }
 
-    const openProduct = async () => {
-        const r = await AdvertServices.set_is_active(productInfo.id, true)
-        if (r.status !== 204){
-            alert(r.data)
-        }
-        else
-            setInfo({...productInfo, is_active: true})
-
-    }
     const closeProduct = async () => {
-        const r = await AdvertServices.set_is_active(productInfo.id, false)
-        if (r.status !== 204){
+        const r = await AdvertServices.delete(productInfo.id)
+        if (r.status !== 204) {
             alert(r.data)
-        }
-        else
-            setInfo({...productInfo, is_active: false})
+        } else
+            navigate('/')
     }
 
     return (
@@ -105,21 +97,13 @@ const ProductPage = ({user, isAuth}) => {
                                     </button>
                                 </div>
                                 : ''}
-                            {isAuth && user.sub === productInfo.owner.id && productInfo.is_active ?
+                            {isAuth && user.sub === productInfo.owner.id ?
                                 <div className="d-flex">
                                     <button className="btn btn-danger flex-fill"
-                                            onClick={closeProduct}>Закрыть объявление
+                                            onClick={closeProduct}>Удалить
                                     </button>
                                 </div>
                                 : ''}
-                            {isAuth && user.sub === productInfo.owner.id && !productInfo.is_active ?
-                                <div className="d-flex">
-                                    <button className="btn btn-light flex-fill"
-                                            onClick={openProduct}>Открыть повторно
-                                    </button>
-                                </div>
-                                : ''
-                            }
 
                         </div>
                         <div className="col-8 p-3">
@@ -143,7 +127,7 @@ const ProductPage = ({user, isAuth}) => {
                                 </div>
                                 <div className="d-flex mx-5">
                                     <h3 style={{color: "midnightblue"}}>Цена: </h3>
-                                    <h3>{productInfo.price}</h3>
+                                    <h3>{productInfo.price} р.</h3>
                                 </div>
                             </div>
                             <div>
@@ -155,7 +139,10 @@ const ProductPage = ({user, isAuth}) => {
                             </div>
                             <br/>
                             {isAuth && user.sub === productInfo.owner.id ?
-                                <QueueList product_id={productInfo.id}/>
+                                <div>
+                                    <h3>Список бронирований</h3>
+                                    <QueueList product_id={productInfo.id}/>
+                                </div>
                                 :
                                 ""
                             }
@@ -165,6 +152,6 @@ const ProductPage = ({user, isAuth}) => {
             }
         </div>
     );
-};
+}
 
 export default ProductPage;

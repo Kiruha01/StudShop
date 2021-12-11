@@ -10,7 +10,7 @@ import CreateAdvert from "../components/ModalWindows/CreateAdvert";
 import {useFetching} from "../hooks/useFetching";
 import Loader from "../components/Loader";
 
-const MainPage = () => {
+const MainPage = ({user}) => {
     const [products, setProducts] = useState([])
     const [productFilter, setProductFilter] = useState({})
     const params = useParams()
@@ -29,9 +29,12 @@ const MainPage = () => {
         <div className="container-fluid">
             <div className="row pt-2">
                 <div className="col-3 p-3 d-flex flex-column">
+                    {user?
                     <button className="btn btn-light" data-bs-toggle="modal" data-bs-target="#createAdvert">+
                         Создать объявление
                     </button>
+                    :
+                    ''}
                     <CreateAdvert/>
                 </div>
             </div>

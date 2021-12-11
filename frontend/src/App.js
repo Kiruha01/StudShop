@@ -14,11 +14,16 @@ function App() {
     const { user, isAuthenticated } = useAuth0()
     const {getAccessTokenSilently} = useAuth0()
     const [fun, isLoading] = useFetching(async ()=> {
-        if (isAuthenticated)
+        if (isAuthenticated) {
             axios.defaults.headers.common['Authorization'] = "Bearer " + await getAccessTokenSilently()
+            const resp = UserServises.getInfo()
+            if (resp == null) {
+                await UserServises.login()
+            }
+        }
     })
     useEffect(async ()=>{
-fun()
+    await fun()
     }, [user])
 
   return (
@@ -31,7 +36,7 @@ fun()
               <BrowserRouter>
                   <Header user={user} isLoading={isLoading} isAuthenticated={isAuthenticated}/>
                   <Routes>
-                      <Route path="/" element={<MainPage/>}/>
+                      <Route path="/" element={<MainPage user={user}/>}/>
                   </Routes>
                   <Routes>
                       <Route path="/product/:id" element={<ProductPage user={user} isAuth={isAuthenticated}/>}/>

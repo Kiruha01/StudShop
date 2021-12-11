@@ -14,12 +14,17 @@ const ProfilePage = ({user, isAuth}) => {
     const [getInfo, isLoading] = useFetching(async () => {
             if (params.id) {
                 setCurUser(await UserServeces.getInfoById(params.id))
+                const res = await AdvertServices.getAll({owner: params.id})
+                setProducts(res)
             } else {
                 setCurUser(await UserServeces.getInfo())
-
-            const res = await AdvertServices.getAll({my: true})
-            setProducts(res)
+                const res = await AdvertServices.getAll({my: true})
+                setProducts(res)
         }
+    })
+
+    const [changeCom, isChanging] = useFetching(async ()=> {
+        await UserServeces.updateComMethod('', curUser.com_method)
     })
     useEffect(async ()=> {
         await getInfo()
@@ -60,19 +65,28 @@ const ProfilePage = ({user, isAuth}) => {
                         :
                         <div className="col">
                             <button className="btn btn-primary"
-                                    onClick={() => UserServeces.updateComMethod('', curUser.com_method)}>Сохранить изменения</button>
-                        </div>}
+                                    onClick={changeCom}>Сохранить изменения</button>
+                            {isChanging?
+                                <Loader/>
+                                :
+                                ""}
+                        </div>
+
+                    }
                 </div>
             </div>
 
-                    {params.id ?
-                        ''
-                        :
+
                         <div className="row">
-                            <h1>Ваши объявления</h1>
-                            <AdvertsPanel products={products}/>
+                            {params.id ?
+                                <h1>Объявления</h1>
+                                :
+                                <h1>Ваши объявления</h1>
+                            }
+
+                                <AdvertsPanel products={products}/>
                         </div>
-                    }
+
                 </div>
         }
         </div>

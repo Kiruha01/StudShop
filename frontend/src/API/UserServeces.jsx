@@ -80,7 +80,7 @@ export default class UserServeces{
 
 
     static async login(){
-        await axios.get('http://localhost:5000/hook/',)
+        const response = await axios.post('https://fadverts-kirill.azurewebsites.net/api/User/')
     }
 
     static async logout(){

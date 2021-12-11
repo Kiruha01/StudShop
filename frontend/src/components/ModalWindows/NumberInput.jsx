@@ -1,6 +1,6 @@
-import {React, useState} from 'react';
+import React,{ useState} from 'react';
 
-const NumberInput = ({ref}) => {
+const NumberInput = React.forwardRef((prodps, ref) => {
     const [val, setVal] = useState('')
 
     function onChange(e){
@@ -12,6 +12,6 @@ const NumberInput = ({ref}) => {
     return (
         <input value={val} className="form-control" ref={ref} onChange={onChange}/>
     );
-};
+});
 
 export default NumberInput;

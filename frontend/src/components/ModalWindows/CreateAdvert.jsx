@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NumberInput from "./NumberInput";
+import {useFetching} from "../../hooks/useFetching";
+import Loader from "../Loader";
 
 const CreateAdvert = () => {
     const [categories, setCategories] = useState([])
@@ -21,12 +23,7 @@ const CreateAdvert = () => {
     const newLocation = useRef()
     const newCategory = useRef()
 
-    useEffect(async () => {
-        setCategories(await CategoryService.getAll())
-        setLocations(await LocationService.getAll())
-    }, [])
-
-    const create = async (e) => {
+    const [createAd, isCreating] = useFetching(async ()=>{
         const data = {
             name: newName.current.value || undefined,
             price: parseInt(newPrice.current.value, 10) || undefined,
@@ -35,9 +32,9 @@ const CreateAdvert = () => {
             category_id: newCategory.current.value || undefined
         }
         const res = await AdvertServices.create(data)
-        if (res.status !== 201){
-            console.log(res.data)
-            toast.error(JSON.stringify(res.data.message), {
+        if (res.status === 401){
+            console.log(res.status)
+            toast.error("Необходимо войти, чтобы создавать объявления", {
                 position: "top-left",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -47,7 +44,18 @@ const CreateAdvert = () => {
                 progress: undefined,
             });
         }
-        else{
+        else if (res.status !== 201) {
+            toast.error(JSON.stringify(res.data), {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        else {
             toast.success("Ваше объявление создано!", {
                 position: "top-left",
                 autoClose: 3000,
@@ -57,8 +65,20 @@ const CreateAdvert = () => {
                 draggable: true,
                 progress: undefined,
             });
+            return res.data.id
+        }
+    })
+
+    useEffect(async () => {
+        setCategories(await CategoryService.getAll())
+        setLocations(await LocationService.getAll())
+    }, [])
+
+    const create = async (e) => {
+            const pr_id = await createAd()
+        if (pr_id){
             closeButton.current.click()
-            navigate('/product/' + res.data.id)
+            navigate('/product/' + pr_id)
         }
     }
 
@@ -115,6 +135,10 @@ const CreateAdvert = () => {
 
                     </div>
                     <div className="modal-footer">
+                        {isCreating?
+                        <Loader/>
+                        :
+                        ""}
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                         <button type="button" className="btn btn-primary"
                                 onClick={create}>Сохранить</button>

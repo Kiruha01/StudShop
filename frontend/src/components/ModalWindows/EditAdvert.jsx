@@ -3,8 +3,10 @@ import InputForm from "./InputForm";
 import CategoryService from "../../API/CategoryService";
 import LocationService from "../../API/LocationService";
 import AdvertServices from "../../API/AdvertServices";
-import { ToastContainer, toast } from 'react-toastify';
+import {toast, ToastContainer} from 'react-toastify';
 import ImageEdit from "./ImageEdit";
+import {useFetching} from "../../hooks/useFetching";
+import Loader from "../Loader";
 
 const EditAdvert = ({product, setProduct}) => {
     console.log(product)
@@ -13,17 +15,64 @@ const EditAdvert = ({product, setProduct}) => {
 
     const [categories, setCategories] = useState([])
     const [locations, setLocations] = useState([])
+    const [f, isLoading] = useFetching(async ()=>{
+        return await AdvertServices.edit(product.id, newProduct)
+    })
+    const [uploadFile, isUploading] = useFetching(async (formData)=>{
+        const r =  await AdvertServices.add_photo(product.id, formData)
+        if (r.status !== 201){
+            toast.error("Фото не было добавлено", {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        else {
+            setProduct({...product, pictures: [...product.pictures, r.data]})
+        }
+    })
+
+    const [deleteFile, isDeleting] = useFetching(async (id)=>{
+        const r = await AdvertServices.delete_photo(id)
+        if (r.status !== 204){
+            toast.error("Не удалось удалить фото", {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        else {
+            setProduct({
+                ...product, pictures: product.pictures.filter((p) => {
+                return p.id !== id
+                })
+            })
+        }
+    })
 
     useEffect(async () => {
         setNewProduct({...product, location_id: product.location.id, category_id: product.category?.id})
         setCategories(await CategoryService.getAll())
         setLocations(await LocationService.getAll())
-    }, [product])
+    }, [])
 
     async function edit(){
-        const response = await AdvertServices.edit(product.id, newProduct)
-        if (response.status !== 204){
+        const response = await f()
+        if (response.status !== 200){
             toast.error("Some error!")
+        }
+        else{
+            const prod = (await AdvertServices.getById(product.id)).data
+            setProduct(prod)
+            closeButton.current.click()
         }
     }
 
@@ -31,11 +80,13 @@ const EditAdvert = ({product, setProduct}) => {
         console.log(e.target.files)
         var formData = new FormData();
         formData.append("image", e.target.files[0]);
-        await AdvertServices.add_photo(product.product_id, formData)
+        await uploadFile(formData)
     }
 
     return (
         <div className="modal fade" tabIndex="-1" id="createAdvert">
+            <ToastContainer
+            />
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
@@ -61,7 +112,7 @@ const EditAdvert = ({product, setProduct}) => {
                                     onChange={(e) => setNewProduct({...newProduct, location_id: e.target.value})}>
                                 <option selected disabled> </option>
                                 {locations.map(item =>
-                                    <option value={item.location_id}>{item.name}</option>
+                                    <option value={item.id}>{item.name}</option>
                                 )}
                             </select>
                         </InputForm>
@@ -70,19 +121,24 @@ const EditAdvert = ({product, setProduct}) => {
                                     onChange={(e) => setNewProduct({...newProduct, category_id: e.target.value})}>
                                 <option selected disabled> </option>
                                 {categories.map(item =>
-                                    <option value={item.category_id}>{item.name}</option>
+                                    <option value={item.id}>{item.name}</option>
                                 )}
                             </select>
                         </InputForm>
 
                     <div className="row">
-                        {newProduct.pictures?.map(p => <ImageEdit picture={p} />)}
+                        {product.pictures?.map(p => <ImageEdit picture={p} deletePicture={deleteFile}/>)}
                     </div>
                         <h5>Добавить файл</h5>
                         <input type="file" accept="image/*" onChange={send}/>
                     </div>
 
                     <div className="modal-footer">
+                        {isLoading || isUploading || isDeleting?
+                        <Loader/>
+                        :
+                            ""
+                        }
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
                         <button type="button" className="btn btn-primary"
                                 onClick={edit}>Сохранить</button>
