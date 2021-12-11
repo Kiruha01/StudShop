@@ -65,7 +65,7 @@ const EditAdvert = ({product, setProduct}) => {
         }
 
         fetch()
-    })
+    }, [])
 
     async function edit(){
         const response = await f()

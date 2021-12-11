@@ -10,11 +10,9 @@ import Loader from "../components/Loader";
 const MainPage = ({user}) => {
     const [products, setProducts] = useState([])
     const [productFilter, setProductFilter] = useState({})
-    const [getProducts, isLoading] = useFetching(() => {
-        AdvertServices.getAll({...productFilter}).then((products)=>{
-            setProducts(products)
-        })
-
+    const [getProducts, isLoading] = useFetching(async () => {
+        const products = await AdvertServices.getAll({...productFilter})
+        setProducts(products)
     })
 
     useEffect(() => {

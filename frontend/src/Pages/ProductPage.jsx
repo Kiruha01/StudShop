@@ -16,8 +16,6 @@ const ProductPage = ({user, isAuth}) => {
     const [productInfo, setInfo] = useState({name: null, pictures: [], location: {},
         category: {}, owner: {}, price: null})
     const [youBooked, setYouBooked] = useState(false)
-    const [categories, setCategories] = useState([])
-    const [locations, setLocations] = useState([])
     const [getInfo, isLoading] = useFetching(async ()=> {
         const response = await AdvertServices.getById(params.id)
         setInfo(response.data)
