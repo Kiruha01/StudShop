@@ -33,7 +33,6 @@ const CreateAdvert = () => {
         }
         const res = await AdvertServices.create(data)
         if (res.status === 401){
-            console.log(res.status)
             toast.error("Необходимо войти, чтобы создавать объявления", {
                 position: "top-left",
                 autoClose: 3000,
@@ -116,18 +115,16 @@ const CreateAdvert = () => {
                             <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" ref={newDescription}/>
                         </InputForm>
                         <InputForm name="Расположение">
-                            <select className="form-select" aria-label="Default select example" ref={newLocation}>
-                                <option selected disabled> </option>
+                            <select className="form-select" aria-label="Default select example" ref={newLocation} defaultValue={undefined}>
                                 {locations.map(item =>
-                                    <option value={item.id}>{item.name}</option>
+                                    <option value={item.id} key={item.id}>{item.name}</option>
                                 )}
                             </select>
                         </InputForm>
                         <InputForm name="Категория">
-                            <select className="form-select" aria-label="Default select example" ref={newCategory}>
-                                <option selected disabled> </option>
+                            <select className="form-select" aria-label="Default select example" ref={newCategory} defaultValue={undefined}>
                                 {categories.map(item =>
-                                <option value={item.id}>{item.name}</option>
+                                <option value={item.id} key={item.id}>{item.name}</option>
                                 )}
                             </select>
                         </InputForm>

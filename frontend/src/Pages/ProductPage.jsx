@@ -1,4 +1,4 @@
-import {React, useMemo, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom'
 import AdvertServices from "../API/AdvertServices";
 import CaroselPhoto from "../components/CaroselPhoto";
@@ -16,6 +16,8 @@ const ProductPage = ({user, isAuth}) => {
     const [productInfo, setInfo] = useState({name: null, pictures: [], location: {},
         category: {}, owner: {}, price: null})
     const [youBooked, setYouBooked] = useState(false)
+    const [categories, setCategories] = useState([])
+    const [locations, setLocations] = useState([])
     const [getInfo, isLoading] = useFetching(async ()=> {
         const response = await AdvertServices.getById(params.id)
         setInfo(response.data)
@@ -24,8 +26,11 @@ const ProductPage = ({user, isAuth}) => {
     const navigate = useNavigate();
 
 
-    useEffect(async () => {
-        await getInfo()
+    useEffect(() => {
+        async function fetch() {
+            await getInfo()
+        }
+        fetch()
     }, [])
 
     const bookProduct = async () => {
@@ -43,7 +48,7 @@ const ProductPage = ({user, isAuth}) => {
 
     const unbookProduct = async () => {
         try {
-            const res = await BookingService.Unbook(params.id)
+            await BookingService.Unbook(params.id)
             setYouBooked(false)
             setInfo({...productInfo, len_of_qeue: productInfo.len_of_qeue - 1, is_booking: productInfo.len_of_qeue - 1 > 0})
 

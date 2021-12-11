@@ -5,13 +5,15 @@ import DealItem from "./DealItem";
 const QueueList = ({user_id}) => {
     const [list, setList] = useState([])
 
-    useEffect(async () => {
-        try {
-            setList(await UserServeces.getAllDeals(user_id))
-        }
-        catch (e){
+    useEffect(() => {
+        async function fetch() {
+            try {
+                setList(await UserServeces.getAllDeals(user_id))
+            } catch (e) {
 
+            }
         }
+        fetch()
     }, [user_id])
 
     return (

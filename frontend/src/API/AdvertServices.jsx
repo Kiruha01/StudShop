@@ -5,7 +5,6 @@ export default class AdvertServices{
             const response = await axios.get('https://fadverts-kirill.azurewebsites.net/api/Products/', {
                 params: params
             })
-            console.log(response.data)
             return response.data
 
     }
@@ -13,7 +12,6 @@ export default class AdvertServices{
     static async create(params) {
         try {
             const response = await axios.post('https://fadverts-kirill.azurewebsites.net/api/Products/', params)
-            console.log(response.data)
             return response
         }
         catch (e){

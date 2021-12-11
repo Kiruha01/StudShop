@@ -1,6 +1,5 @@
-import {React, useMemo, useState, useEffect} from 'react';
+import {React, useState, useEffect} from 'react';
 import UserServeces from "../API/UserServeces";
-import List from "../components/DealsList/List";
 import AdvertsPanel from "../components/AdvertsPanel";
 import AdvertServices from "../API/AdvertServices";
 import {useParams} from 'react-router-dom'
@@ -26,8 +25,11 @@ const ProfilePage = ({user, isAuth}) => {
     const [changeCom, isChanging] = useFetching(async ()=> {
         await UserServeces.updateComMethod('', curUser.com_method)
     })
-    useEffect(async ()=> {
-        await getInfo()
+    useEffect(()=> {
+        async function fetch() {
+            await getInfo()
+        }
+        fetch()
     }, [])
 
     return (

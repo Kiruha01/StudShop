@@ -9,7 +9,6 @@ import {useFetching} from "../../hooks/useFetching";
 import Loader from "../Loader";
 
 const EditAdvert = ({product, setProduct}) => {
-    console.log(product)
     const [newProduct, setNewProduct] = useState({})
     const closeButton = useRef()
 
@@ -58,11 +57,15 @@ const EditAdvert = ({product, setProduct}) => {
         }
     })
 
-    useEffect(async () => {
-        setNewProduct({...product, location_id: product.location.id, category_id: product.category?.id})
-        setCategories(await CategoryService.getAll())
-        setLocations(await LocationService.getAll())
-    }, [])
+    useEffect(() => {
+        async function fetch() {
+            setNewProduct({...product, location_id: product.location.id, category_id: product.category?.id})
+            setCategories(await CategoryService.getAll())
+            setLocations(await LocationService.getAll())
+        }
+
+        fetch()
+    })
 
     async function edit(){
         const response = await f()
@@ -77,7 +80,6 @@ const EditAdvert = ({product, setProduct}) => {
     }
 
     async function send(e){
-        console.log(e.target.files)
         var formData = new FormData();
         formData.append("image", e.target.files[0]);
         await uploadFile(formData)

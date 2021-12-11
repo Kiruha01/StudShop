@@ -1,11 +1,8 @@
 import {React, useState, useEffect} from 'react';
-import SearchPanel from "../components/SearchPanel";
 import AdvertsPanel from "../components/AdvertsPanel";
 import AdvertServices from "../API/AdvertServices";
 import FilterPanel from "../components/FilterPanel/FilterPanel";
 import FilterByBooking from "../components/FilterPanel/FilterByBooking";
-import {useParams} from 'react-router-dom'
-import UserServeces from "../API/UserServeces";
 import CreateAdvert from "../components/ModalWindows/CreateAdvert";
 import {useFetching} from "../hooks/useFetching";
 import Loader from "../components/Loader";
@@ -13,14 +10,15 @@ import Loader from "../components/Loader";
 const MainPage = ({user}) => {
     const [products, setProducts] = useState([])
     const [productFilter, setProductFilter] = useState({})
-    const params = useParams()
-    const [getProducts, isLoading, errors] = useFetching(async () => {
-        const products = await AdvertServices.getAll({...productFilter})
-        setProducts(products)
+    const [getProducts, isLoading] = useFetching(() => {
+        AdvertServices.getAll({...productFilter}).then((products)=>{
+            setProducts(products)
+        })
+
     })
 
-    useEffect(async () => {
-        await getProducts()
+    useEffect(() => {
+        getProducts()
     }, [productFilter])
 
     return (

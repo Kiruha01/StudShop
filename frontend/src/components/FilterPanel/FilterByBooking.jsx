@@ -21,7 +21,6 @@ const FilterByBooking = ({idAccordion, filter, setFilter}) => {
                 <input className="form-check-input" type="checkbox" value={is_booking} id="isBooking_check"
                 onChange={(event => {
                     setIs_booking(event.target.checked)
-                    console.log(event.target.checked)
                 })}/>
                     <label className="form-check-label" htmlFor="isBooking_check">
                         Забронировано

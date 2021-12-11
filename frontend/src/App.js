@@ -1,4 +1,4 @@
-import {React, useState, useEffect} from "react";
+import {React, useEffect} from "react";
 import Header from "./components/Header";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import MainPage from "./Pages/MainPage";
@@ -7,7 +7,6 @@ import ProductPage from "./Pages/ProductPage";
 import ProfilePage from "./Pages/ProfilePega";
 import {useAuth0} from "@auth0/auth0-react";
 import axios from "axios";
-import UserServeces from "./API/UserServeces";
 import {useFetching} from "./hooks/useFetching";
 
 function App() {
@@ -22,8 +21,11 @@ function App() {
             }
         }
     })
-    useEffect(async ()=>{
-    await fun()
+    useEffect(()=>{
+        async function fetch() {
+            await fun()
+        }
+        fetch()
     }, [user])
 
   return (

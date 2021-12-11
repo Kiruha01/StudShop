@@ -5,7 +5,6 @@ export default class UserServeces{
         try {
             const response = await axios.get('https://fadverts-kirill.azurewebsites.net/api/User/'
             )
-            console.log('!' + response.status)
             return response.data
         } catch (e) {
             if (e.response) {
@@ -14,7 +13,6 @@ export default class UserServeces{
 
             }
             else {
-                console.log(e)
                 return null
             }
         }
@@ -24,7 +22,6 @@ export default class UserServeces{
         try {
             const response = await axios.get('https://fadverts-kirill.azurewebsites.net/api/User/' + id + '/'
             )
-            console.log('!' + response.status)
             return response.data
         } catch (e) {
             if (e.response) {
@@ -41,11 +38,10 @@ export default class UserServeces{
 
     static async updateComMethod(user_id, method) {
         try {
-            const response = await axios.put('https://fadverts-kirill.azurewebsites.net/api/User/' + (user_id ? (user_id + '/') : ''), {
+            return await axios.put('https://fadverts-kirill.azurewebsites.net/api/User/' + (user_id ? (user_id + '/') : ''), {
                 com_method: method
                 }
-            )
-            return response.data
+            ).data
         } catch (e) {
             if (e.response) {
                 if (e.response.status === 401)
@@ -80,7 +76,7 @@ export default class UserServeces{
 
 
     static async login(){
-        const response = await axios.post('https://fadverts-kirill.azurewebsites.net/api/User/')
+        await axios.post('https://fadverts-kirill.azurewebsites.net/api/User/')
     }
 
     static async logout(){

@@ -11,8 +11,9 @@ const AdvertCard = ({product}) => {
             <div className={"h-100 " + classes.image}>
                 {product.is_booking ? <RoundLabel color_class={"bg-dark " + classes.text}>Забронированно</RoundLabel> : ''}
                 <img src={product.pictures[0] ? product.pictures[0].url : ""} className={"card-img-top " + classes.photo_cover}
-                     alt="No photo"/>
+                     alt="..."/>
             </div>
+
                 <div className="card-body position-relative mb-0">
                     <Link to={"/product/" + product.id} className="stretched-link"/>
                     <h5 className="card-title"><strong>{product.name}</strong></h5>

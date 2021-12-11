@@ -15,13 +15,16 @@ const QueueList = ({product_id}) => {
         setQueue(qeue.filter((el) => el.id !== id))
     }
 
-    useEffect(async () => {
-        try {
-            await getQ()
-        }
-        catch (e){
+    useEffect(() => {
+        async function fetch(){
+            try {
+                await getQ()
+            }
+            catch (e){
 
+            }
         }
+        fetch()
     }, [product_id])
 
     return (
