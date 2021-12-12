@@ -9,14 +9,22 @@ import Loader from "../components/Loader";
 
 const MainPage = ({user}) => {
     const [products, setProducts] = useState([])
+    const [notActiveProducts, setNotActiveProducts] = useState([])
     const [productFilter, setProductFilter] = useState({})
     const [getProducts, isLoading] = useFetching(async () => {
-        const products = await AdvertServices.getAll({...productFilter})
+        const products = await AdvertServices.getAll({...productFilter, is_active: true, is_approved: true})
         setProducts(products)
+    })
+
+    const [getNotApprovedProducts, isApproveLoading] = useFetching(async () => {
+        const products = await AdvertServices.getAll({is_approved: false})
+        setNotActiveProducts(products)
     })
 
     useEffect(() => {
         getProducts()
+        if (user && user.is_staff)
+            getNotApprovedProducts()
     }, [productFilter])
 
     return (
@@ -33,6 +41,12 @@ const MainPage = ({user}) => {
                     ''}
                     <CreateAdvert/>
                 </div>
+                {user && user.is_staff?
+                <div className="col overflow-scroll">
+                    <AdvertsPanel on_line={true} products={notActiveProducts}/>
+
+                </div>
+                    :""}
             </div>
             <div className="row pt-2">
                 <div className="col-3 p-3">

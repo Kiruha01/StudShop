@@ -35,8 +35,8 @@ const EditAdvert = ({product, setProduct}) => {
         }
     })
 
-    const [deleteFile, isDeleting] = useFetching(async (id)=>{
-        const r = await AdvertServices.delete_photo(id)
+    const [deleteFile, isDeleting] = useFetching(async (product_id, picture_id)=>{
+        const r = await AdvertServices.delete_photo(product_id, picture_id)
         if (r.status !== 204){
             toast.error("Не удалось удалить фото", {
                 position: "top-left",
@@ -51,7 +51,7 @@ const EditAdvert = ({product, setProduct}) => {
         else {
             setProduct({
                 ...product, pictures: product.pictures.filter((p) => {
-                return p.picture_id !== id
+                return p.picture_id !== picture_id
                 })
             })
         }
@@ -129,7 +129,7 @@ const EditAdvert = ({product, setProduct}) => {
                         </InputForm>
 
                     <div className="row">
-                        {product.pictures?.map(p => <ImageEdit picture={p} deletePicture={deleteFile}/>)}
+                        {product.pictures?.map(p => <ImageEdit picture={p} deletePicture={deleteFile} prod_id={product.product_id}/>)}
                     </div>
                         <h5>Добавить файл</h5>
                         <input type="file" accept="image/*" onChange={send}/>

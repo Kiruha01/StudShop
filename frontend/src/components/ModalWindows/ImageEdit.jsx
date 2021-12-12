@@ -1,17 +1,12 @@
 import React from 'react';
 
-const ImageEdit = ({picture, deletePicture}) => {
+const ImageEdit = ({picture, deletePicture, prod_id}) => {
     return (
         <div className="card text-center col-3">
             <img src={picture.url} alt="///" className="card-img-top" style={{height: "100px"}}/>
-            {/*<div className="card-body">*/}
-            {/*    <h5 className="card-title">Special title treatment</h5>*/}
-            {/*    <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>*/}
-            {/*    <a href="#" className="btn btn-primary">Go somewhere</a>*/}
-            {/*</div>*/}
             <div className="card-footer">
                 <button className="btn" onClick={() => {
-                    deletePicture(picture.picture_id)
+                    deletePicture(prod_id, picture.picture_id)
                 }}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="firebrick"
                          className="bi bi-trash-fill" viewBox="0 0 16 16">
@@ -21,12 +16,6 @@ const ImageEdit = ({picture, deletePicture}) => {
                 </button>
             </div>
         </div>
-        // <div className="mt-3 col">
-        //     <div className="">
-        //
-        //
-        //     </div>
-        // </div>
     );
 };
 

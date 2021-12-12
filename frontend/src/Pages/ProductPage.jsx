@@ -76,6 +76,15 @@ const ProductPage = ({user}) => {
             setInfo({...productInfo, is_active: false})
     }
 
+    const setApproved = async (is_approved) => {
+        const r = await AdvertServices.edit(productInfo.product_id, {is_approved: is_approved})
+        if (r.status !== 204){
+            alert(r.data)
+        }
+        else
+            setInfo({...productInfo, is_approved: is_approved})
+    }
+
     return (
         <div>
             {isLoading ?
@@ -120,7 +129,21 @@ const ProductPage = ({user}) => {
                             {user && user.user_id === productInfo.owner.user_id && !productInfo.is_active ?
                                 <div className="d-flex">
                                     <button className="btn btn-light flex-fill"
-                                            onClick={openProduct}>Открыть повторно</button>\
+                                            onClick={openProduct}>Открыть повторно</button>
+                                </div>
+                                : ''
+                            }
+                            {user && user.is_staff && !productInfo.is_approved ?
+                                <div className="d-flex">
+                                    <button className="btn btn-light flex-fill"
+                                            onClick={()=> {setApproved(true)}}>Одобрить</button>
+                                </div>
+                                : ''
+                            }
+                            {user && user.is_staff && productInfo.is_approved ?
+                                <div className="d-flex">
+                                    <button className="btn btn-dark flex-fill"
+                                            onClick={()=> {setApproved(false)}}>Забанить</button>
                                 </div>
                                 : ''
                             }

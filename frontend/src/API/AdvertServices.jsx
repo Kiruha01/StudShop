@@ -45,9 +45,9 @@ export default class AdvertServices{
         }
     }
 
-    static async delete_photo(id) {
+    static async delete_photo(id, p_id) {
         try {
-            const response = await axios.delete('https://fadverts-kirill.azurewebsites.net/api/pictures/' + id + '/'
+            const response = await axios.delete('http://localhost:5000/api/products/' + id + '/pictures/' + p_id + '/'
             )
             return response
         }
@@ -68,7 +68,9 @@ export default class AdvertServices{
 
     static async set_is_active(id, is_active) {
         try {
-            const response = await axios.delete('https://fadverts-kirill.azurewebsites.net/api/Products/' + id + '/')
+            const response = await axios.put('http://localhost:5000/api/products/' + id + '/', {
+                is_active: is_active
+            })
             return response
         }
         catch (e){
