@@ -50,6 +50,24 @@ export default class UserServeces{
         }
     }
 
+    static async updateStaff(user_id, is_staff) {
+        try {
+            const response = await axios.put('http://localhost:5000/api/user/' + user_id +'/', {
+                    is_staff: is_staff
+                }
+            )
+            return response
+        } catch (e) {
+            if (e.response) {
+                return e.response
+            }
+            else {
+                console.log(e)
+                return {status: 0}
+            }
+        }
+    }
+
     static async getAllDeals(user_id) {
         try {
             const response = await axios.get('http://localhost:5000/api/user/' + user_id + '/deals/'

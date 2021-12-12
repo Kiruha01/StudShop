@@ -11,4 +11,17 @@ export default class CategoryService{
                 return []
         }
     }
+
+    static async create(name) {
+        try {
+            const response = await axios.post('http://localhost:5000/api/categories/', {
+                name: name
+                }
+            )
+            return response
+        } catch (e) {
+            console.log(e)
+            return null
+        }
+    }
 }

@@ -6,6 +6,9 @@ import {useParams} from 'react-router-dom'
 import {useFetching} from "../hooks/useFetching";
 import Loader from "../components/Loader";
 import List from "../components/DealsList/List";
+import CreateCategory from "../components/ModalWindows/CreateCategory";
+import {toast, ToastContainer} from "react-toastify";
+import RoundLabel from "../components/AdvertsCard/RoundLabel";
 
 const ProfilePage = ({user}) => {
     const [products, setProducts] = useState([])
@@ -26,6 +29,29 @@ const ProfilePage = ({user}) => {
     const [changeCom, isChanging] = useFetching(async ()=> {
         await UserServeces.updateComMethod('', curUser.com_method)
     })
+
+    const [changeStaff, isChangingStaff] = useFetching(async (is_staff)=> {
+        return  await UserServeces.updateStaff(params.id, is_staff)
+    })
+
+    async function setStaff(is_staff){
+        const res = await changeStaff(is_staff)
+        if (res.status === 204){
+            setCurUser({...curUser, is_staff: is_staff})
+        }
+        else {
+            toast.error("Что-то пошло не так", {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    }
+
     useEffect(()=> {
         async function fetch() {
             await getInfo()
@@ -40,8 +66,26 @@ const ProfilePage = ({user}) => {
                 <Loader/>
                 :
                 <div className="container">
+                    <CreateCategory/>
+                    <ToastContainer
+                        position="top-left"
+                        autoClose={3000}
+                        hideProgressBar={false}
+                        newestOnTop
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover={false}
+                    />
                     <div className="row">
+                        <div className="d-flex">
                         <h1>Данные профиля</h1>
+                            {curUser.is_staff?
+                            <RoundLabel color_class="bg-warning"><h1>Admin</h1></RoundLabel>
+                                :""
+                            }
+                        </div>
                         <div className="row">
                             <div className="col-3">
                                 <span>Имя</span>
@@ -58,6 +102,7 @@ const ProfilePage = ({user}) => {
                     <div className="col">
                         <span>{curUser.email}</span>
                     </div>
+
                 </div>
                 <div className="row">
 
@@ -87,6 +132,31 @@ const ProfilePage = ({user}) => {
                     }
                 </div>
             </div>
+                    {user && user.is_staff && !params.id ?
+                        <div className="row">
+                            <button className="btn btn-warning" data-bs-toggle="modal"
+                                    data-bs-target="#createCat">Создать категорию</button>
+                        </div>
+                        :
+                        ""
+                    }
+                    {user && user.is_staff && params.id && curUser.is_staff ?
+                        <div className="row">
+                            <button className="btn btn-danger" onClick={()=> {setStaff(false)}}>Разжалобить администратора</button>
+                        </div>
+                        :
+                        ""
+                    }
+                    {user && user.is_staff && params.id && !curUser.is_staff ?
+                        <div className="row">
+                            <button className="btn btn-primary" onClick={()=> {setStaff(true)}}>Назначить администратором</button>
+                        </div>
+                        :
+                        ""
+                    }
+                    {isChangingStaff?
+                    <Loader/>:""
+                    }
 
             <div className="row">
                 <h1>Совершённые сделки</h1>
