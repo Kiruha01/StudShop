@@ -35,11 +35,11 @@ class Product(db.Model):
     name = db.Column(db.String(20), nullable=False)
     price = db.Column(db.Numeric(7, 2), nullable=False)
     description = db.Column(db.Text)
-    category_id = db.Column(db.ForeignKey(Category.category_id), nullable=True)
+    category_id = db.Column(db.ForeignKey(Category.category_id, ondelete='SET NULL'), nullable=True)
     category = db.relationship(Category)
-    location_id = db.Column(db.ForeignKey(Location.location_id), nullable=False)
+    location_id = db.Column(db.ForeignKey(Location.location_id, ondelete='SET NULL'), nullable=False)
     location = db.relationship(Location)
-    owner_id = db.Column(db.ForeignKey(User.user_id), nullable=False)
+    owner_id = db.Column(db.ForeignKey(User.user_id, ondelete='CASCADE'), nullable=False)
     owner = db.relationship(User)
     is_active = db.Column(db.Boolean, server_default='t', nullable=False)
     is_approved = db.Column(db.Boolean, server_default='f', nullable=False)
@@ -68,6 +68,7 @@ product_fields_small = {
     'pictures': fields.Nested(picture_field, allow_null=True),
     'is_booking': fields.Boolean,
     'is_active': fields.Boolean,
+    "is_approved": fields.Boolean
 }
 product_fields = product_fields_small.copy()
 

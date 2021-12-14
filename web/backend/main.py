@@ -35,7 +35,7 @@ def create_app():
 
     @app.after_request
     def apply_caching(response):
-        response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"
+        response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type,authorization"
         response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, DELETE'
         response.headers['Access-Control-Allow-Credentials'] = 'true'
@@ -125,7 +125,7 @@ def create_app():
             db.session.commit()
         token = user.encode_auth_token(user.user_id)
 
-        return redirect('http://localhost:3000?token=' + token)
+        return redirect('http://localhost?token=' + token)
 
     @login_required
     @app.route('/logout')

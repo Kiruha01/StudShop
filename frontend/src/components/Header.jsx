@@ -12,7 +12,7 @@ const Header = ({user}) => {
                 {user ?
                     <div>
                         <Link className={"btn btn-success"} to="/profile">{user.name}</Link>
-                        <a href="http://localhost:5000/logout" className={"btn btn-success"}>Выход</a>
+                        <a href="http://localhost:3000" className={"btn btn-success"}>Выход</a>
                     </div>
                     :
                     <a className={"btn btn-success"} href='http://localhost:5000/login'>Вход</a>

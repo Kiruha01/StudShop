@@ -17,11 +17,13 @@ products = Blueprint('products', __name__)
 api = Api(products)
 
 
-def get_products_with_is_booking(product_id=None, is_active=None, user_id=None):
+def get_products_with_is_booking(product_id=None, is_active=None, user_id=None, is_approved=None):
     is_booking_case = sql.expression.case((func.count(Booking.booking_id) > 0, "true"), else_="false")
     query = db.session.query(Product, func.count(Booking.booking_id), is_booking_case)
     if is_active is not None:
-        query = query.filter(Product.is_active == True)
+        query = query.filter(Product.is_active == is_active)
+    if is_approved is not None:
+        query = query.filter(Product.is_approved == is_approved)
     if user_id is not None:
         query = query.filter(Product.owner_id == user_id)
     query = query.outerjoin(Booking, Product.product_id == Booking.product_id). \
@@ -44,6 +46,7 @@ class ProductListView(Resource):
     parser2 = reqparse.RequestParser()
     parser2.add_argument('is_booking')
     parser2.add_argument('is_active')
+    parser2.add_argument('is_approved')
     parser2.add_argument('owner')
     parser2.add_argument('my')
 
@@ -54,7 +57,8 @@ class ProductListView(Resource):
     def get(self):
         args = remove_none_filters(self.parser2.parse_args())
         q = get_products_with_is_booking(is_active=args.get('is_active'),
-                                         user_id=current_user.user_id if args.get('my') else args.get('owner'))
+                                         user_id=current_user.user_id if args.get('my') else args.get('owner'),
+                                         is_approved=args.get('is_approved'))
 
         out = []
         for prod, queue, book in q:
@@ -81,6 +85,7 @@ class ProductView(Resource):
     parser.add_argument('location_id', type=int)
     parser.add_argument('description', type=str)
     parser.add_argument('is_active', type=inputs.boolean)
+    parser.add_argument('is_approved', type=inputs.boolean)
 
     @marshal_with(product_fields)
     def get(self, product_id):
@@ -99,7 +104,7 @@ class ProductView(Resource):
     @login_required
     def put(self, product_id):
         prod = Product.query.get_or_404(product_id)
-        if prod.owner_id != current_user.user_id:
+        if prod.owner_id != current_user.user_id and not current_user.is_staff:
             return {"message": "Only for owner"}, 403
         args = remove_none_filters(self.parser.parse_args())
         db.session.query(Product).filter_by(product_id=product_id).update(args)
@@ -120,7 +125,8 @@ class PictureView(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('url', type=str, required=True)
 
-    # @login_required
+    @login_required
+    @marshal_with(picture_field)
     def post(self, product_id):
         print(request.files['image'])
         url = save_photo(request.files['image'].stream.read())
@@ -128,11 +134,10 @@ class PictureView(Resource):
         prod = Product.query.get_or_404(product_id)
         if prod.owner_id != current_user.user_id:
             return {"message": "Only for owner"}, 403
-        args = self.parser.parse_args()
-        pic = Picture(**args, product_id=product_id)
+        pic = Picture(url=url, product_id=product_id)
         db.session.add(pic)
         db.session.commit()
-        return url, 200
+        return pic, 201
 
 
 class PictureItemView(Resource):

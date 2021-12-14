@@ -59,10 +59,10 @@ const CreateCategory = () => {
                             <input type="text" className="form-control" ref={newName}/>
                         </InputForm>
                     </div>
-                    <h2>Существующие категории</h2>
+                    {/*<h2>Существующие категории</h2>
                     <div style={{maxHeight: "400px"}} className="overflow-scroll">
 
-                    </div>
+                    </div>*/}
                     <div className="modal-footer">
                         {isCreating?
                             <Loader/>
