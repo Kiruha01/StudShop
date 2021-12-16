@@ -28,7 +28,6 @@ location_fields = {
 }
 
 
-#TODO: переписать с ассоциативной таблицей с пользователми, которые забронировали: users = db.relationship()
 class Product(db.Model):
     __tablename__ = 'product'
     product_id = db.Column(db.Integer, primary_key=True)

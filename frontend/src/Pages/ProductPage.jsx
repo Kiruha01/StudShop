@@ -85,6 +85,15 @@ const ProductPage = ({user}) => {
             setInfo({...productInfo, is_approved: is_approved})
     }
 
+    const sellProduct = async () => {
+        const r = await AdvertServices.set_selled(productInfo.product_id)
+        if (r.status !== 204){
+            alert(r.data)
+        }
+        else
+            setInfo({...productInfo, is_active: false, is_booking: false, queue_len: 0})
+    }
+
     return (
         <div>
             {isLoading ?
@@ -147,6 +156,14 @@ const ProductPage = ({user}) => {
                                 </div>
                                 : ''
                             }
+                            <br/>
+                            {user && user.user_id === productInfo.owner.user_id && productInfo.queue_len > 0 ?
+                                <div className="d-flex">
+                                    <button className="btn btn-info flex-fill"
+                                            onClick={sellProduct}>Подтвердить продажу
+                                    </button>
+                                </div>
+                                : ''}
 
                         </div>
                         <div className="col-8 p-3">
@@ -181,7 +198,7 @@ const ProductPage = ({user}) => {
                                 </div>
                             </div>
                             <br/>
-                            {user && user.user_id === productInfo.owner.user_id ?
+                            {user && user.user_id === productInfo.owner.user_id && productInfo.is_booking ?
                                 <div>
                                     <h3>Список бронирований</h3>
                                     <QueueList product_id={productInfo.product_id}/>

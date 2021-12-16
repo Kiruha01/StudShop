@@ -125,7 +125,7 @@ def create_app():
             db.session.commit()
         token = user.encode_auth_token(user.user_id)
 
-        return redirect('http://localhost?token=' + token)
+        return redirect('http://localhost:3000?token=' + token)
 
     @login_required
     @app.route('/logout')

@@ -77,4 +77,14 @@ export default class AdvertServices{
             return e.response
         }
     }
+
+    static async set_selled(id) {
+        try {
+            const response = await axios.get('http://localhost:5000/api/products/' + id + '/bookings/approve/')
+            return response
+        }
+        catch (e){
+            return e.response
+        }
+    }
 }
