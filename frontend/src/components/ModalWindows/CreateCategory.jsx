@@ -1,12 +1,47 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import InputForm from "./InputForm";
 import Loader from "../Loader";
 import {useFetching} from "../../hooks/useFetching";
 import {toast, ToastContainer} from "react-toastify";
 import CategoryService from "../../API/CategoryService";
+import LocationService from "../../API/LocationService";
+import RoundLabel from "../AdvertsCard/RoundLabel";
 
 const CreateCategory = () => {
     const closeButton = useRef()
+    const [categories, setCategories] = useState([])
+
+    useEffect(async () => {
+        setCategories(await CategoryService.getAll())
+    }, [])
+
+    async function deleteCategory(category_id){
+        const r = await CategoryService.delete(category_id)
+        if (r){
+            setCategories(categories.filter((value => {
+                return value.category_id !== category_id
+            })))
+            toast.success("Категория deleted!", {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        else
+            toast.error("Не удалось удалить категорию", {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+    }
 
     const newName = useRef()
 
@@ -32,6 +67,7 @@ const CreateCategory = () => {
                 draggable: true,
                 progress: undefined,
             });
+            setCategories([...categories, res.data])
             return res.data
         }
 
@@ -59,10 +95,16 @@ const CreateCategory = () => {
                             <input type="text" className="form-control" ref={newName}/>
                         </InputForm>
                     </div>
-                    {/*<h2>Существующие категории</h2>
-                    <div style={{maxHeight: "400px"}} className="overflow-scroll">
+                    <h2>Существующие категории</h2>
+                    <div style={{maxHeight: "200px"}} className="overflow-scroll">
+                        {categories.map(item =>
+                            <div className="d-flex my-2">
+                                <RoundLabel color_class="bg-warning"><span>{item.name}</span></RoundLabel>
+                                <button className="btn p-0 mx-2 btn-close" onClick={()=> deleteCategory(item.category_id)}></button>
+                            </div>
+                        )}
 
-                    </div>*/}
+                    </div>
                     <div className="modal-footer">
                         {isCreating?
                             <Loader/>

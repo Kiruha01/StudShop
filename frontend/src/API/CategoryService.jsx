@@ -24,4 +24,15 @@ export default class CategoryService{
             return null
         }
     }
+
+    static async delete(id) {
+        try {
+            const response = await axios.delete('http://localhost:5000/api/categories/' + id + '/'
+            )
+            return response
+        } catch (e) {
+            console.log(e)
+            return null
+        }
+    }
 }
