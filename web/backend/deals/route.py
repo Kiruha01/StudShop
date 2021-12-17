@@ -69,7 +69,7 @@ class ApproveBooking(Resource):
             deal = Deal(user_id=booking.product.owner_id, product_id=booking.product_id, date=booking.date)
             db.session.add(deal)
             db.session.query(Booking).filter_by(product_id=product_id).delete()
-            ## TODO: Disable advert
+            booking.product.is_active = False
             db.session.commit()
         except:
             db.session.rollback()

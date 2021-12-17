@@ -112,8 +112,7 @@ const ProductPage = ({user}) => {
                                         <button className="btn btn-success" onClick={bookProduct}>Забронировать
                                             продукт</button>
                                         :
-                                        <button className="btn btn-dark" onClick={unbookProduct}>NON Забронировать
-                                            продукт</button>
+                                        <button className="btn btn-dark" onClick={unbookProduct}>Отказаться от бронирования</button>
                                     }
                                     <div>Людей в очереди <span
                                         className="badge rounded-pill bg-success align-self-end">{productInfo.queue_len}</span>

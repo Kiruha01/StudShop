@@ -36,7 +36,7 @@ class Product(db.Model):
     description = db.Column(db.Text)
     category_id = db.Column(db.ForeignKey(Category.category_id, ondelete='SET NULL'), nullable=True)
     category = db.relationship(Category)
-    location_id = db.Column(db.ForeignKey(Location.location_id, ondelete='SET NULL'), nullable=False)
+    location_id = db.Column(db.ForeignKey(Location.location_id, ondelete='SET NULL'), nullable=True)
     location = db.relationship(Location)
     owner_id = db.Column(db.ForeignKey(User.user_id, ondelete='CASCADE'), nullable=False)
     owner = db.relationship(User)

@@ -39,8 +39,6 @@ class Deal(db.Model):
     product_id = db.Column(db.ForeignKey(Product.product_id, ondelete='CASCADE'), nullable=False)
     product = db.relationship(Product)
     date = db.Column(db.DateTime, nullable=False)
-    __table_args__ = (UniqueConstraint('user_id', 'product_id', name='_deals_user_product_uc'),
-                      )
 
 
 deal_fields = {

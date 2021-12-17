@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE ISSPECS SYSTEM "ISSpecs.dtd">
+<ISSPECS>
+	<DESCRIPTION>
+		<TITLE>StudShop</TITLE>
+		<SUBJ>Студенческий интернет-магазин</SUBJ>
+	</DESCRIPTION>
+	<DATA>
+		<ENTITY ent_id="user">
+			<PROPERTY>user_id</PROPERTY>
+			<PROPERTY>email</PROPERTY>
+			<PROPERTY>name</PROPERTY>
+			<PROPERTY>com_method</PROPERTY>
+			<PROPERTY>is_staff</PROPERTY>
+		</ENTITY>
+		<ENTITY ent_id="category">
+			<PROPERTY>category_id</PROPERTY>
+			<PROPERTY>name</PROPERTY>
+		</ENTITY>
+		<ENTITY ent_id="location">
+			<PROPERTY>location_id</PROPERTY>
+			<PROPERTY>name</PROPERTY>
+		</ENTITY>
+		<ENTITY ent_id="product">
+			<PROPERTY>product_id</PROPERTY>
+			<PROPERTY>name</PROPERTY>
+			<PROPERTY>price</PROPERTY>
+			<PROPERTY>description</PROPERTY>
+			<PROPERTY>category_id</PROPERTY>
+			<PROPERTY>location_id</PROPERTY>
+			<PROPERTY>owner_id</PROPERTY>
+			<PROPERTY>owner_id</PROPERTY>
+			<PROPERTY>is_approved</PROPERTY>
+		</ENTITY>
+		<ENTITY ent_id="picture">
+			<PROPERTY>picture_id</PROPERTY>
+			<PROPERTY>url</PROPERTY>
+			<PROPERTY>product_id</PROPERTY>
+		</ENTITY>
+		<ENTITY ent_id="booking">
+			<PROPERTY>booking_id</PROPERTY>
+			<PROPERTY>user_id</PROPERTY>
+			<PROPERTY>product_id</PROPERTY>
+			<PROPERTY>date</PROPERTY>
+		</ENTITY>
+				<ENTITY ent_id="deal">
+			<PROPERTY>deal_id</PROPERTY>
+			<PROPERTY>user_id</PROPERTY>
+			<PROPERTY>product_id</PROPERTY>
+			<PROPERTY>date</PROPERTY>
+		</ENTITY>
+		<RELATIONSHIP ent_ids="category product">
+			<PROPERTY>One to many</PROPERTY>
+		</RELATIONSHIP>
+		<RELATIONSHIP ent_ids="location product">
+			<PROPERTY>One to many</PROPERTY>
+		</RELATIONSHIP>
+		<RELATIONSHIP ent_ids="user product">
+			<PROPERTY>One to many</PROPERTY>
+		</RELATIONSHIP>
+		<RELATIONSHIP ent_ids="product picture">
+			<PROPERTY>One to many</PROPERTY>
+		</RELATIONSHIP>
+		<RELATIONSHIP ent_ids="booking product">
+			<PROPERTY>One to many</PROPERTY>
+		</RELATIONSHIP>
+		<RELATIONSHIP ent_ids="booking user">
+			<PROPERTY>One to many</PROPERTY>
+		</RELATIONSHIP>
+		<RELATIONSHIP ent_ids="deal product">
+			<PROPERTY>One to many</PROPERTY>
+		</RELATIONSHIP>
+		<RELATIONSHIP ent_ids="deal user">
+			<PROPERTY>One to many</PROPERTY>
+		</RELATIONSHIP>
+		<CONSTRAINT>user.user_id - primary key</CONSTRAINT>
+		<CONSTRAINT>category.category_id - primary key</CONSTRAINT>
+		<CONSTRAINT>location.location_id - primary key</CONSTRAINT>
+		<CONSTRAINT>product.product_id - primary key</CONSTRAINT>
+		<CONSTRAINT>picture.picture_id - primary key</CONSTRAINT>
+		<CONSTRAINT>booking.booking_id - primary key</CONSTRAINT>
+		<CONSTRAINT>deal.deal_id - primary key</CONSTRAINT>
+		<CONSTRAINT>picture.product_id - ON DELETE CASCADE</CONSTRAINT>
+		<CONSTRAINT>booking.product_id - ON DELETE CASCADE</CONSTRAINT>
+		<CONSTRAINT>deal.product_id - ON DELETE CASCADE</CONSTRAINT>
+		<CONSTRAINT>picture.product_id - ON DELETE CASCADE</CONSTRAINT>
+		<CONSTRAINT>product.category_id - ON DELETE SET NULL</CONSTRAINT>
+		<CONSTRAINT>UNIQUE(booking.user_id, booking.product_id)</CONSTRAINT>
+	</DATA>
+	<ROLES>
+		<ROLE>
+			<TITLE>User</TITLE>
+			<RESPONSIBILITY>Создавать/редактировать/удалять свои объявления</RESPONSIBILITY>
+			<RESPONSIBILITY>Просматривать количество человек в очереди на заказ</RESPONSIBILITY>
+			<RESPONSIBILITY>Удалять людей из очереди на свой продукт</RESPONSIBILITY>
+			<RESPONSIBILITY>Бронировать другие заказы</RESPONSIBILITY>
+			<TOTALUSERS>Неограничено</TOTALUSERS>
+		</ROLE>
+		<ROLE>
+			<TITLE>Staff</TITLE>
+			<RESPONSIBILITY>Создавать/редактировать/удалять все объявления</RESPONSIBILITY>
+			<RESPONSIBILITY>Просматривать количество человек в очереди на заказ</RESPONSIBILITY>
+			<RESPONSIBILITY>Удалять людей из очереди на свой продукт</RESPONSIBILITY>
+			<RESPONSIBILITY>Бронировать другие заказы</RESPONSIBILITY>
+			<RESPONSIBILITY>Одобрять объявления</RESPONSIBILITY>
+			<RESPONSIBILITY>Добавлять и удалять новых Staff</RESPONSIBILITY>
+			<RESPONSIBILITY>Создавать/удалять категории</RESPONSIBILITY>
+			<TOTALUSERS>1-10</TOTALUSERS>
+		</ROLE>
+	</ROLES>
+	<TECHSPEC>
+		<TYPE>Web Site</TYPE>
+		<DEVTOOLS>
+			<DEV>Python (Flask)</DEV>
+			<DEV>SQLAlchemy</DEV>
+			<DEV>React.js</DEV>
+		</DEVTOOLS>
+		<DBMS>
+			<TITLE>PostgreSQL</TITLE>
+			<VERSION>13.5</VERSION>
+			<REASONING>Поддержка ORM SQLAlchemy, широкая распространённость</REASONING>
+		</DBMS>
+	</TECHSPEC>
+</ISSPECS>
