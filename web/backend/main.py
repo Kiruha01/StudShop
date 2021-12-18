@@ -1,4 +1,5 @@
 import json
+import os
 
 import requests as requests
 from flask import Flask, request, redirect
@@ -12,12 +13,12 @@ from flask_login import (
 )
 
 import config
-from .user import users
-from .product.route import products
-from .user.model import User
-from .category.route import categories
-from .location.route import locations
-from .database import db
+from backend.user.route import users
+from backend.product.route import products
+from backend.user.model import User
+from backend.category.route import categories, Category
+from backend.location.route import locations, Location
+from backend.database import db
 
 
 def get_google_provider_cfg():
@@ -51,12 +52,6 @@ def create_app():
         return user
 
     client = WebApplicationClient(app.config['GOOGLE_CLIENT_ID'])
-
-    # @app.route('/hook/')
-    # def hook():
-    #     user = User.query.get(2)
-    #     login_user(user)
-    #     return '', 204
 
     @app.route("/")
     def index():
@@ -138,7 +133,31 @@ def create_app():
     app.register_blueprint(categories, url_prefix='/api/categories/')
     app.register_blueprint(locations, url_prefix='/api/locations/')
 
+    @app.cli.command()
+    def recreate_db():
+        db.drop_all()
+        db.create_all()
 
+    @app.cli.command()
+    def make_admin():
+        db.session.query(User).update({"is_admin": True})
+        db.session.commit()
+
+    @app.cli.command()
+    def create_data():
+        db.session.add(Location(name="ПУНК"))
+        db.session.add(Location(name="ВУНК"))
+        db.session.add(Location(name="ДУНК"))
+
+        db.session.add(Category(name="Одежда"))
+        db.session.add(Category(name="Техника"))
+        db.session.add(Category(name="Канцелярия"))
+        db.session.add(Category(name="Продукты"))
+        db.session.add(Category(name="Услуги"))
+        db.session.add(Category(name="Учёба"))
+        db.session.add(Category(name="Проездной"))
+
+        db.session.commit()
 
     with app.app_context():
         db.create_all()  # Create sql tables for our data models
