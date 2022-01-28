@@ -1,3 +1,6 @@
+![](https://img.shields.io/badge/Flask-2.0.2-orange)
+![](https://img.shields.io/badge/SQLAlchemy-1.4.26-red)
+![](https://img.shields.io/badge/React.js-17.0.2-blue)
 # Описание
 Проект для дисциплины **"Базы данных"**
 
